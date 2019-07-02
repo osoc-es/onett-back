@@ -1,0 +1,27 @@
+par_6_28,28,Juzgados Plaza Castilla,Paseo de la Castellana 187,40.4650604583015,-3.68972639781606,A,http://www.crtm.es,0,est_90_21,,2
+par_6_32,32,Castellana-Rosario Pino,Paseo de la Castellana 167,40.4618742013768,-3.68999243036924,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_34,34,Cuzco,Paseo de la Castellana 123,40.4583272271004,-3.6903181502783,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_36,36,Castellana-San Germán,Paseo de la Castellana 115,40.4566100130494,-3.69048636484967,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_5626,5626,Biblioteca Nacional,Paseo de Recoletos 37,40.4241386416861,-3.69097373911033,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_57,57,Emilio Castelar,Paseo de la Castellana 41,40.4350137172231,-3.68926359716893,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_59,59,Castellana-Rubén Darío,Paseo de la Castellana 22,40.433020918832,-3.68880999822339,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_61,61,Castellana-Ministerio Interior,Calle de Zurbarán 32,40.4291726897342,-3.68979795967654,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_63,63,Colón,Plaza de Colón 3,40.4259064951886,-3.69062450098304,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_68,68,Recoletos,Paseo de Recoletos 25,40.4228966482418,-3.69151842065154,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_73,73,Cibeles,Paseo de Recoletos 3,40.4202357914327,-3.69280593946565,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_49,49,Nuevos Ministerios-Cercanías,Paseo de la Castellana 67,40.4454091236309,-3.69169561567856,A,http://www.crtm.es,0,est_90_71,,2
+par_6_51,51,Nuevos Ministerios-Castellana,Paseo de la Castellana 65,40.4440930445835,-3.69182365311429,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_53,53,Museo Ciencias Naturales,Paseo de la Castellana SN,40.4410277746673,-3.69219319534525,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_77,77,Neptuno,Plaza de Cánovas del Castillo 5,40.4151300878641,-3.69465726037455,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_79,79,Museo del Prado-Jardín Botánico,Paseo del Prado 22,40.4123671696686,-3.69342851614841,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_81,81,Prado-Atocha,Paseo del Prado 48,40.4099260079139,-3.69262709547135,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_41,41,Lima-Santiago Bernabéu,Paseo de la Castellana 95,40.4515074777418,-3.69106443432962,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_4337,4337,Gregorio Marañón,Plaza del Doctor Marañón SN,40.438547101438,-3.69122008949752,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_46,46,AZCA,Plaza de Pablo Ruiz Picasso 1,40.4494255861214,-3.69120087719264,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_48,48,Nuevos Ministerios-Centro Comercial,Paseo de la Castellana 71,40.4466039997913,-3.69149742115174,A,http://www.crtm.es,0,est_90_71,,2
+par_6_76,76,Banco de España,Paseo del Prado 2,40.4178262788003,-3.69424254322182,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_38,38,Castellana-Rafael Salgado,Plaza de Manolete 1,40.4545952297212,-3.69070017978222,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_5602,5602,Plaza Castilla,Plaza de Castilla s/n,40.4667252428371,-3.68928482790594,,http://www.crtm.es,0,est_90_21,,0
+par_6_83,83,Reina Sofía,Plaza del Emperador Carlos V 7,40.4077760769698,-3.69359214709933,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_84,84,Teatro Circo Price,Ronda de Atocha 32,40.4062944752711,-3.69877287374323,A,http://www.crtm.es,0,,Europe/Madrid,2
+par_6_86,86,Embajadores,Gta de Embajadores 1,40.4054345871168,-3.7024170698747,A,http://www.crtm.es,0,,Europe/Madrid,2

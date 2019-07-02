@@ -1,3 +1,4 @@
+stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,location_type,parent_station,stop_timezone,wheelchair_boarding
 par_6_29,29,Juzgados Plaza Castilla,Paseo de la Castellana 214,40.4651266846777,-3.68919516042857,A,http://www.crtm.es,0,est_90_21,,0
 par_6_33,33,Castellana-Rosario Pino,Calle de Carlos Maurras 1,40.4618499055306,-3.68953401416295,A,http://www.crtm.es,0,,Europe/Madrid,0
 par_6_35,35,Cuzco,Paseo de la Castellana 170,40.4598938448843,-3.68972082738504,A,http://www.crtm.es,0,,Europe/Madrid,0

@@ -3,7 +3,7 @@
  <img src="docs/horario-ida-linea-27-autobuses-emt-web.jpg" width="300" height="300" >  <img src="docs/horario-vuelta-linea-27-autobuses-emt-web.jpg" width="300" height="300" > 
 
 
-# LINE 27 ROUTE: EMBAJADORES - PLAZA DE CASTILLA 
+# ROUTE: EMBAJADORES - PLAZA DE CASTILLA 
 Embajadores - 86
 
 Teatro Circo Price - 85
@@ -36,7 +36,7 @@ Castellana-Rosario Pino - 33
 Juzgados Plaza Castilla - 29
 Plaza Castilla - 5602
 
-# LINE 27 ROUTE: PLAZA DE CASTILLA - EMBAJADORES
+# ROUTE: PLAZA DE CASTILLA - EMBAJADORES
 
 Plaza Castilla - 5602
 Juzgados Plaza Castilla - 28

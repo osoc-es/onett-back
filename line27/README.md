@@ -5,8 +5,11 @@
 
 # LINE 27 ROUTE: EMBAJADORES - PLAZA DE CASTILLA 
 Embajadores - 86
+
 Teatro Circo Price - 85
+
 José Antonio Armona - 87
+
 Calle de las Delicias - 88
 Delicias-Atocha - 89
 Prado-Atocha - 82

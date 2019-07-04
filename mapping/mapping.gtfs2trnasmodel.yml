@@ -1,0 +1,128 @@
+prefixes:
+  ex: "http://example.com/"
+  trm : https://w3id.org/transmodel/terms#
+
+mappings:
+
+#agency
+
+  agency:
+    sources:
+      - ['agency.csv~csv']
+    s: https://w3id.org/transmodel/resource/$pais/$ciudad/$tipo_trasporte/authority/$(agency_id)
+    po:
+      - [a, trm:authority]
+      - [trm:uthorityName, $(agency_name)]
+      - [trm:agencyUrl, $(agency_url)]
+      - [trm:authorityTimezone ,$(agency_timezone)]
+      - [trm:authorityLang,$(agency_lang)]
+
+#calendar
+  calendar:
+    sources:
+      - ['calendar.csv~csv']
+    s: https://w3id.org/transmodel/resource/service/$(service_id)
+    po:
+      - [a, trm:ServiceCalendarFrame]
+      - [trm:DaysOfWeek, $(monday)]
+      - [trm:DaysOfWeek, $(tuesday)]
+      - [trm:DaysOfWeek, $(wednesday)]
+      - [trm:DaysOfWeek, $(thursday)]
+      - [trm:DaysOfWeek, $(friday)]
+      - [trm:DaysOfWeek, $(saturday)]
+      - [trm:FromDate, $(start_date)]
+      - [trm:ToDate, $(end_date)]
+#calendar_dates 
+
+  calendar_dates:
+    sources:
+      - ['calendar_dates.csv~csv']
+    s: http://example.com/$(service_id)
+    po:
+      - [a, trm:ServiceCalendarFrame]
+      - [trm:ToDate, $(date)]
+      - [trm:IsAvailable, $(exception_type)]
+
+#fare_attributes      
+  fare_attributes:
+    sources:
+      - ['fare_attributes.csv~csv']
+    s: http://example.com/$(fare_id)
+    po:
+      - [a, trm:FareProduct]
+      - [trm:FareProductPrice, $(price)]
+      - [trm:Currency, $(currency_type)]
+      - [trm:ChargingMoment, $(payment_method)]
+      - [trm:transfers, $(transfers)]
+      - [trm:StandardDuration, $(transfer_duration)]
+
+#fare_rules
+  fare_rules:
+    sources:
+      - ['fare_rules.csv~csv']
+    s: http://example.com/$(fare_id)
+    po:
+      - [a, trm:FareProduct]
+      - [trm:GroupOfLinesRef , $(route_id)]
+      - [trm:AuthorityRef , $(route_id)]
+      - [trm:StartTariffZoneRef , $(origin_id)]
+      - [trm:EndTariffZoneRef , $(destination_id)]
+      - [trm:TariffZoneRef , $(contains_id)]
+
+
+#feed_info
+  feed_info:
+    sources:
+      - ['feed_info.csv~csv']
+    s: http://example.com/$(agency_id)
+    po:
+      - [a, trm:authority]
+#frequencies TODO
+#routes TODO
+#shapes TODO
+
+#stop_times
+  stop_times:
+    sources:
+      - ['stop_times.csv~csv']
+    s: http://example.com/$(trip_id)
+    po:
+      - [a, trm:ServiceJourney]
+      - [trm:arrivalTime , $(arrival_time)]
+      - [trm:Departure , $(departure_time)]
+      - [trm:ScheduledStopPointRef , $(stop_id)]
+      - [trm:stopSequence , $(stop_sequence)]
+      - [trm:DestinationDisplayView , $(stop_headsign)]
+      - [trm:ForBoarding , $(pickup_type)]
+      - [trm:ForAlighting , $(drop_off_type)]
+      - [trm:OnwardLink , $(shape_dist_traveled)]
+      - [trm:TariffZoneRef , $(timepoint)]
+#stops
+  stops:
+    sources:
+      - ['stops.csv~csv']
+    s: http://example.com/$(stop_id)
+    po:
+      - [a, trm:ScheduledStopPoint]
+      - [trm:PublicCode , $(stop_code)]
+      - [trm:Name , $(stop_name)]
+      - [trm:Description , $(stop_desc)]
+      - [trm:Latitude , $(stop_lat)]
+      - [trm:Longitude , $(stop_lon)]
+      - [trm:TariffZoneRef , $(zone_id)]
+      - [trm:Url , $(stop_url)]
+      - [trm:StopPlace , $(location_type)]
+#trips
+  trips:
+    sources:
+      - ['trips.csv~csv']
+    s: http://example.com/$(trip_id)
+    po:
+      - [a, trm:ServiceJourney]
+      - [trm:lineRef, $(route_id)]
+      - [trm:DayTypeRef, $(service_id)]
+      - [trm:DestinationDisplayView, $(trip_headsign)]  
+      - [trm:DirectionRef, $(direction_id)]  
+      - [trm:BlockRef , $(block_id)]
+      - [trm:LinkSequenceProjection , $(shape_id)]   
+      

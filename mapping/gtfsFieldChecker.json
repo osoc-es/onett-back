@@ -262,21 +262,76 @@
         "type":"required"
       },
       "route_id":{
-        "type":"required"
+        "type":"optional"
       },
       "origin_id":{
-        "type":
+        "type":"optional"
+      }, 
+      "destination_id":{
+      	"type":"optional"
+      },
+      "contains_id":{
+        "type":"optional"
       }
     }
   },
   "shapes":{ # Luis
-  
+    "type":"optional",
+    "fields":{
+      "shape_id":{
+        "type":"required"
+      },
+      "shape_pl_lat":{
+        "type":"required"
+      },
+      "shape_pt_lon":{
+        "type":"required"
+      },
+      "shape_pt_sequence":{
+        "type":"required"
+      },
+      "shape_dist_traveled":{
+        "type":"optional"
+      }
+    }
   },
   "frequencies":{ # Luis
-  
+    "type":"optional",
+    "fields":{
+      "trip_id":{
+        "type":"required"
+      },
+      "start_time":{
+        "type":"required"
+      },
+      "end_time":{
+        "type":"required"
+      },
+      "headway_secs":{
+        "type":"required"
+      },
+      "exac_times":{
+        "type":"optional"
+      },
+    }
+
   },
   "transfer":{ # Luis
-  
+    "type":"optional",
+    "fields":{
+      "from_stop_id":{
+        "type":"required"
+      },
+      "to_stop_id":{
+        "type":"required"
+      },
+      "trasnfer_type":{
+        "type":"required"
+      },
+      "min_trasnfer_time":{
+        "type":"optional"
+      }
+    }    
   }, 
   "pathways":{ #John
   
@@ -285,8 +340,7 @@
   
   },
   "feed_info":{ # John
-  
-  } 
 
-
+    }
+  }
 }

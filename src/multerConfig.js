@@ -4,10 +4,10 @@ const storage = multer.diskStorage({
     cb(null, 'uploads');
   },
   filename: function (req, file, cb) {
-    let DateString = new Date();
-    console.log(Date.now());
-    let currentDate = DateString.getDate() + "" + DateString.getMonth()  +  "" + DateString.getFullYear() + "" + DateString.getHours() + "" + DateString.getMinutes();
-    cb(null, file.originalname  + "." + currentDate);
+   // let DateString = new Date();
+   // console.log(Date.now());
+   // let currentDate = DateString.getDate() + "" + DateString.getMonth()  +  "" + DateString.getFullYear() + "" + DateString.getHours() + "" + DateString.getMinutes();
+    cb(null, file.originalname);
   }
 })
  

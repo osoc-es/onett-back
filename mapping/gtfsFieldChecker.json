@@ -333,10 +333,6 @@
       }
     }    
   }, 
-
-}
-
-  //jhon TODO
   "pathways": {
     "type": "optional",
     "fields": {

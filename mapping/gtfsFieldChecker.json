@@ -254,5 +254,39 @@
         "type":"required"
       }
     }
-  }
+  }, 
+  "fare_rules":{# Luis
+    "type":"optional",
+    "fields":{
+      "fare_id":{
+        "type":"required"
+      },
+      "route_id":{
+        "type":"required"
+      },
+      "origin_id":{
+        "type":
+      }
+    }
+  },
+  "shapes":{ # Luis
+  
+  },
+  "frequencies":{ # Luis
+  
+  },
+  "transfer":{ # Luis
+  
+  }, 
+  "pathways":{ #John
+  
+  }, 
+  "levels":{ #John
+  
+  },
+  "feed_info":{ # John
+  
+  } 
+
+
 }

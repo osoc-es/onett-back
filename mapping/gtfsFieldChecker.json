@@ -1,5 +1,5 @@
 {
-  "trip": {
+  "trips": {
     "type": "required",
     "fields": {
       "route_id": {
@@ -34,7 +34,7 @@
       }
     }
   },
-  "fare_attribute": {
+  "fare_attributes": {
     "type": "optinal",
     "fields": {
       "fare_id": {
@@ -312,7 +312,7 @@
       },
       "exac_times":{
         "type":"optional"
-      },
+      }
     }
 
   },

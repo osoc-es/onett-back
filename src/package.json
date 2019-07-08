@@ -9,6 +9,7 @@
     "express": "^4.17.1",
     "lokijs": "^1.5.6",
     "multer": "^1.4.1",
+    "n-readlines": "^1.0.0",
     "nodemon": "^1.19.1",
     "npm": "^6.10.0",
     "unzipper": "^0.10.1"

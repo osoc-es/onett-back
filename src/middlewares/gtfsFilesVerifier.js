@@ -1,7 +1,7 @@
 const fs  = require('fs');
 const lineByLine = require('n-readlines');
-
 const gtfsFieldChecker = require('../../mapping/gtfsFieldChecker.json');
+const gtfsToRdf = require('../../mapping/gtfsToRdf.json');
 const requiredFiles = [];
 const optionalFiles = [];
 const dirFiles = [];
@@ -44,13 +44,15 @@ function fieldChecker(path){
 	let error = false
 	while( i < finalFiles.length && !error){
 		let requiredFields = getRequiredFields(finalFiles[i]);
-		let optionalFields = readFirstLine(path + finalFiles[i] + '.txt', requiredFields)
-		error = optionalFields.error && requiredFiles.includes(finalFiles[i]);
-		finalJson[finalFiles[i]] = optionalFields.optionals;
+		let filledFields = readFirstLine(path + finalFiles[i] + '.txt', requiredFields)
+		error = filledFields.error && requiredFiles.includes(finalFiles[i]);
+		if(filledFields.optionals.length > 0)
+			finalJson[finalFiles[i]] = filledFields.optionals
 		i++
 	}
-	console.log(finalJson);
-	return error;
+	if(error)
+		return null;	
+	return finalJson;
 
 }
 function getRequiredFields(file){
@@ -67,8 +69,8 @@ function readFirstLine(file, requiredFields){
 	let liner = new lineByLine(file);
 	let values= null;
 	let line = liner.next();
-	let optionalFields = {
-		'error':false,
+	let filledFields = {
+		'error':true,
 		'optionals':[]
 	}
 	let i = 0;
@@ -76,32 +78,67 @@ function readFirstLine(file, requiredFields){
 	fields = line.toString('ascii').substring(3,line.length -1)
 	fields = fields.split(',');
 	if(values = liner.next()){
-		values = values.toString('ascii').split(',');
+		values = values.toString('ascii').substring(0, values.length - 1)
+		values  = values.split(',');
 		//Borramos los campos vacios
 		while(i < fields.length){
-			if(values[i] != '')
-				optionalFields.optionals.push(fields[i]);
+			if(values[i] != '' && values[i] != ' ')
+				filledFields.optionals.push(fields[i]);
 			i++;
 		}
 		i = 0;
 		//Comprobamos que estan todos los campos obligatorios
-		while(i < requiredFields.length && optionalFields.optionals.includes(requiredFields[i])){
+		while(i < requiredFields.length && filledFields.optionals.includes(requiredFields[i])){
 			i++;
 		}
-		if(i == requiredFields.length){
-			//Borramos los campos obligatorios si esta todo correcto.
-			requiredFields.forEach((field) => {
-				optionalFields.optionals.splice(optionalFields.optionals.indexOf(field), 1);
-			});
-		}else{
-			optionalFields.error = true;
-		}
+		if(i == requiredFields.length)
+			filledFields.error = false;
 		
 	}
-	return optionalFields;
+	return filledFields;
 }
-function yarmlGenerator(jsonFile){
-	
+function mappingGenerator(jsonFile){
+	//let filenames = Object.keys(jsonFile);
+	let filenames = ['agency', 'trips', 'stops'];
+	let subjectHead = gtfsToRdf["subjectHead"];
+	let outputFile = 'remove.yarml';
+	let prefix = Object.keys(gtfsToRdf["prefixs"])[0];
+	let header  = `
+prefixes:
+  ${prefix} : ${gtfsToRdf["prefixs"][prefix]}
+mappings:\n`
+	fs.appendFile(outputFile, header, (err) => {
+		if(err) console.log(err);
+	});
+
+	filenames.forEach(file => {
+		console.log('file: ' + file);
+		let source = `-[${file}.txt~txt]\n`;
+		let type = gtfsToRdf["data"][file]["type"];
+		let s  = `s: ${subjectHead}PAIS/CIUDAD/TTRANSPORT/${gtfsToRdf["data"][file]["link"]}\n`;
+		let po = [];
+		let poElement = `
+  ${file}:
+    sources:
+     ${source}
+    ${s}
+    po:
+      - [a, ${prefix}:${type}]\n`;
+		fs.appendFile(outputFile, poElement, (err) =>{
+			if(err) console.log(err);
+		})
+		jsonFile[file].forEach((field) => {
+			if(field != gtfsToRdf["data"][file]["id"]){
+			console.log("field: " + field);
+			poElement = `      - [${prefix}:${gtfsToRdf["data"][file]["fields"][field]["rdf"]},$(${field})]\n`
+			fs.appendFile(outputFile, poElement, (err) =>{
+				if(err)
+					console.log(err);
+			});
+			}
+			//po.push(poElement);
+		});
+	});
 }
 jsonFileCounter();
 dirFileCounter('uploads/CTRM_Madird_Spain_862019153/');
@@ -113,4 +150,5 @@ if(requiredFilesChecker){
 
 optionalFileChecker();
 sanitizeVerifiedFiles();
-fieldChecker('uploads/CTRM_Madird_Spain_862019153/');
+let finalJson = fieldChecker('uploads/CTRM_Madird_Spain_862019153/');
+let finalYarml = mappingGenerator(finalJson);

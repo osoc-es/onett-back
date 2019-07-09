@@ -7,7 +7,7 @@ mappings:
     sources:
      -[agency.txt~txt]
 
-    s: https://w3id.org/transmodel/resource/PAIS/CIUDAD/TTRANSPORT/
+    s: https://w3id.org/transmodel/resource/PAIS/CIUDAD/TTRANSPORT/$(agency_id)
 
     po:
       - [a, trm:authority]
@@ -20,7 +20,7 @@ mappings:
     sources:
      -[trips.txt~txt]
 
-    s: https://w3id.org/transmodel/resource/PAIS/CIUDAD/TTRANSPORT/
+    s: https://w3id.org/transmodel/resource/PAIS/CIUDAD/TTRANSPORT/$(trip_id)
 
     po:
       - [a, trm:ServiceJourney]
@@ -36,7 +36,7 @@ mappings:
     sources:
      -[stops.txt~txt]
 
-    s: https://w3id.org/transmodel/resource/PAIS/CIUDAD/TTRANSPORT/
+    s: https://w3id.org/transmodel/resource/PAIS/CIUDAD/TTRANSPORT/$(stop_id)
 
     po:
       - [a, trm:ScheduledStopPoint]

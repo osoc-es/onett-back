@@ -115,7 +115,7 @@ mappings:\n`
 		console.log('file: ' + file);
 		let source = `-[${file}.txt~txt]\n`;
 		let type = gtfsToRdf["data"][file]["type"];
-		let s  = `s: ${subjectHead}PAIS/CIUDAD/TTRANSPORT/${gtfsToRdf["data"][file]["link"]}\n`;
+		let s  = `s: ${subjectHead}PAIS/CIUDAD/TTRANSPORT/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})\n`;
 		let po = [];
 		let poElement = `
   ${file}:

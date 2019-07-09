@@ -1,0 +1,416 @@
+{
+  "prefixs":{
+    "trm":"https://w3id.org/transmodel/terms#"
+  },
+  "data":{
+  "trips": {
+    "fields": {
+      "route_id": {
+        "rdf":"lineRef"
+      },
+      "service_id": {
+        "rdf":"DayTypeRef"
+      },
+      "trip_id": {
+        "rdf":"subject"
+      },
+      "trip_headsign": {
+        "rdf":"DestinationDisplayView"
+      },
+      "trip_short_name": {
+        "rdf":""
+      },
+      "direction_id": {
+        "rdf":"DirectionRef"
+      },
+      "block_id": {
+        "rdf":"BlockRef"
+      },
+      "shape_id": {
+        "rdf":"LinkSequenceProjection"
+      },
+      "wheelchair_accessible": {
+        "rdf":""
+      },
+      "bikes_allowed": {
+        "rdf":""
+      }
+    }
+  },
+  "fare_attributes": {
+    
+    "fields": {
+      "fare_id": {
+        
+      },
+      "price": {
+        
+      },
+      "currency_type": {
+        
+      },
+      "payment_method": {
+        
+      },
+      "transfers": {
+        
+      },
+      "transfer_duration": {
+        
+      },
+      "agency_id": {
+        
+      }
+    }
+  },
+  "agency": {
+    "fields": {
+      "agency_id": {
+        "rdf":"subject"
+      },
+      "agency_name": {
+        "rdf":"authorityName"
+      },
+      "agency_url": {
+        "rdf":"agencyUrl"
+      },
+      "agency_timezone": {
+        "rdf":"authorityTimezone"
+      },
+      "agency_lang": {
+        "rdf":"authorityLang"
+      },
+      "agency_phone": {
+        "rdf":""
+      },
+      "agency_fare_url": {
+        "rdf":""
+      },
+      "agency_email": {
+        "rdf":""
+      }
+    }
+  },
+  "stops": {
+    "fields": {
+      "stop_id": {
+        "rdf":"subject"
+      },
+      "stop_code": {
+        "rdf":"PublicCode"
+      },
+      "stop_name": {
+        "rdf":"Name"
+      },
+      "stop_desc": {
+        "rdf":"Description"
+      },
+      "stop_lat": {
+        "rdf":"Latitude"
+      },
+      "stop_lon": {
+        "rdf":"Longitud"
+      },
+      "zone_id": {
+        "rdf":"TariffZoneRef"
+      },
+      "stop_url": {
+        "rdf":"Url"
+      },
+      "location_type": {
+        "rdf":"StopPlace"
+      },
+      "parent_sation": {
+        "rdf":""
+      },
+      "stop_timezone": {
+        "rdf":""
+      },
+      "wheelchair_boarding": {
+        "rdf":""
+      },
+      "level_id": {
+        "rdf":""
+      },
+      "platform_code": {
+        "rdf":""
+      }
+    }
+  },
+  "stop_times": {
+
+    "fields": {
+      "trip_id": {
+        "rdf":"subject"
+      },
+      "arrival_time": {
+        "rdf":"arrivalTime"
+      },
+      "departure_time": {
+        "rdf":"Departure"
+      },
+      "stop_id": {
+        "rdf":"ScheduledStopPointRef"
+      },
+      "stop_sequence": {
+        "rdf":"stopSequence"
+      },
+      "stop_headsign": {
+        "rdf":"DestinationDisplayView"
+      },
+      "pickup_type": {
+        "rdf":"ForBoarding"
+      },
+      "drop_off_type": {
+        "rdf":"ForAlighting"
+      },
+      "shape_dist_traveled": {
+        "rdf":"OnwardLink"
+      },
+      "timepoint": {
+        "rdf":"TariffZoneRef"
+      }
+    }
+  },
+  "routes": {
+
+    "fields": {
+      "route_id": {
+      },
+      "agency_id": {
+        
+      },
+      "route_short_name": {
+        
+      },
+      "route_long_name": {
+        
+      },
+      "route_desc": {
+        
+      },
+      "route_type": {
+        
+      },
+      "route_url": {
+        
+      },
+      "route_color": {
+        
+      },
+      "route_text_color": {
+        
+      },
+      "route_sort_order": {
+        
+      }
+    }
+  },
+  "calendar": {
+    "fields": {
+      "service_id": {
+        
+      },
+      "monday": {
+        
+      },
+      "tuesday": {
+        
+      },
+      "wednesday": {
+        
+      },
+      "thursday": {
+        
+      },
+      "friday": {
+        
+      },
+      "saturday": {
+        
+      },
+      "sunday": {
+        
+      },
+      "start_date": {
+        
+      },
+      "end_date": {
+        
+      }
+    }
+  },
+  "calendar_dates": {
+
+    "fields": {
+      "service_id": {
+        
+      },
+      "date": {
+        
+      },
+      "exception_type": {
+        
+      }
+    }
+  },
+  "fare_rules": {
+
+    "fields": {
+      "fare_id": {
+        
+      },
+      "route_id":{
+        
+      },
+      "origin_id":{
+        
+      }, 
+      "destination_id":{
+      
+      },
+      "contains_id":{
+        
+      }
+    }
+  },
+  "shapes":{
+
+    "fields":{
+      "shape_id":{
+        
+      },
+      "shape_pl_lat":{
+        
+      },
+      "shape_pt_lon":{
+        
+      },
+      "shape_pt_sequence":{
+        
+      },
+      "shape_dist_traveled":{
+        
+      }
+    }
+  },
+  "frequencies":{
+
+    "fields":{
+      "trip_id":{
+        
+      },
+      "start_time":{
+        
+      },
+      "end_time":{
+        
+      },
+      "headway_secs":{
+        
+      },
+      "exac_times":{
+        
+      }
+    }
+
+  },
+  "transfer":{ 
+
+    "fields":{
+      "from_stop_id":{
+        
+      },
+      "to_stop_id":{
+        
+      },
+      "trasnfer_type":{
+        
+      },
+      "min_trasnfer_time":{
+        
+      }
+    }    
+  }, 
+  "pathways": {
+
+    "fields": {
+      "pathway_id": {
+        
+      },
+      "from_stop_id": {
+        
+      },
+      "to_stop_id": {
+        
+      },
+      "pathway_mode": {
+        
+      },
+      "is_bidirectional": {
+        
+      },
+      "length": {
+        
+      },
+      "traversal_time": {
+        
+      },
+      "stair_count": {
+        
+      },
+      "max_slope": {
+        
+      },
+      "min_width": {
+        
+      },
+      "signposted_as": {
+        
+      },
+      "reversed_signposted_as": {
+        
+      }
+    }
+  },
+  "levels": {
+    "fields": {
+      "level_id": {
+        
+      },
+      "level_index": {
+        
+      },
+      "level_name": {
+        
+      }
+    }
+  },
+  "feed_info": { 
+    "fields": {
+      "feed_publisher_name": {
+        
+      },
+      "feed_publisher_url": {
+        
+      },
+      "feed_lang": {
+        
+      },
+      "feed_start_date": {
+        
+      },
+      "feed_version": {
+        
+      },
+      "feed_contact_email": {
+        
+      },
+      "feed_contact_url": {
+        
+      }
+    }
+  }
+}
+
+}

@@ -14,18 +14,12 @@ function jsonFileCounter(){
 		else
 			optionalFiles.push(file);
 	}
-	console.log("Requireds: \n");
-	console.log(requiredFiles);
-	console.log("Optional:\n");
-	console.log(optionalFiles);
 }
 function dirFileCounter(path){
 	fs.readdirSync(path).forEach((file) => {
 		let nameFile = file.split('.');
 		dirFiles.push(nameFile[0]);
 	});
-	console.log("Dir Files");
-	console.log(dirFiles);
 }
 function requiredFilesChecker(){
 	let i = 0;
@@ -39,58 +33,75 @@ function optionalFileChecker(){
 		if(dirFiles.includes(file))
 			dirOptionalFiles.push(file);
 	});
-	console.log("Dir Optional Files");
-	console.log(dirOptionalFiles);
 }
 function sanitizeVerifiedFiles(){
 	finalFiles = requiredFiles.concat(dirOptionalFiles);
-	console.log("Final Files");
-	console.log(finalFiles)
 }
 function fieldChecker(path){
 	let finalJson = {};
 	let i = 0;
 	let j = 0;
 	let error = false
-	let line = null;
 	while( i < finalFiles.length && !error){
-		requiredFiles = getRequiredFiles(finalFiles[i]);
-		line = readFirstLine(path + finalFiles[i] + '.txt')
-		//error = line.error;
-		//finalJson.finalFiles[i] = line.optFields;
+		let requiredFields = getRequiredFields(finalFiles[i]);
+		let optionalFields = readFirstLine(path + finalFiles[i] + '.txt', requiredFields)
+		error = optionalFields.error && requiredFiles.includes(finalFiles[i]);
+		finalJson[finalFiles[i]] = optionalFields.optionals;
 		i++
 	}
+	console.log(finalJson);
 	return error;
 
 }
-function getRequiredFiles(file){
-	let fields = gtfsFieldChecker[file][fields];
-	let reqFields = '' //CARGAR LOS CAMPOS OBLIGATORIOS
-	return reqFiles;
+function getRequiredFields(file){
+	let fields = gtfsFieldChecker[file]["fields"];
+	let reqFields = [] //CARGAR LOS CAMPOS OBLIGATORIOS
+	for(field in fields) {
+		if(fields[field]["type"] == "required")
+			reqFields.push(field);
+	}
+	return reqFields;
 }
 function readFirstLine(file, requiredFields){
 	//CARGAR CAMPOS RELLENADOS Y COMPROBAR QUE FILE.FIELDS-INCLUDES(REQUIREDFILES)
 	let liner = new lineByLine(file);
-	console.log(file);
-	console.log("Fields");
+	let values= null;
 	let line = liner.next();
-	fields = line.toString('ascii').substring(3,line.length -1)
-	fields.split(',');
+	let optionalFields = {
+		'error':false,
+		'optionals':[]
+	}
+	let i = 0;
 
-	console.log(fields);
-	let values 
+	fields = line.toString('ascii').substring(3,line.length -1)
+	fields = fields.split(',');
 	if(values = liner.next()){
 		values = values.toString('ascii').split(',');
-		console.log("Values");
-		console.log(values);
+		//Borramos los campos vacios
+		while(i < fields.length){
+			if(values[i] != '')
+				optionalFields.optionals.push(fields[i]);
+			i++;
+		}
+		i = 0;
+		//Comprobamos que estan todos los campos obligatorios
+		while(i < requiredFields.length && optionalFields.optionals.includes(requiredFields[i])){
+			i++;
+		}
+		if(i == requiredFields.length){
+			//Borramos los campos obligatorios si esta todo correcto.
+			requiredFields.forEach((field) => {
+				optionalFields.optionals.splice(optionalFields.optionals.indexOf(field), 1);
+			});
+		}else{
+			optionalFields.error = true;
+		}
+		
 	}
-	/*
-	while(i < 2){
-		line = liner.next();
-		line.toString('ascii').substring(3, line.length - 1);
-		i++;
-	}*/
-	return line;
+	return optionalFields;
+}
+function yarmlGenerator(jsonFile){
+	
 }
 jsonFileCounter();
 dirFileCounter('uploads/CTRM_Madird_Spain_862019153/');

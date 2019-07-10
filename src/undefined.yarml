@@ -1,0 +1,74 @@
+---
+  prefixs: 
+    trm: "https://w3id.org/transmodel/terms#"
+    geo: "http://www.w3.org/2003/01/geo/wgs84_pos#"
+    dct: "http://purl.org/dc/terms/"
+    foaf: "http://xmlns.com/foaf/0.1/"
+    schema: "http://schema.org/"
+  mappings: 
+    trips: 
+      sources: 
+        - 
+          - "[trips.txt~txt]"
+      s: "https://w3id.org/transmodel/resource/PAIS/CIUDAD/TTRANSPORT/trip$(trip_id)"
+      po: 
+        - "trm:lineRef,$(route_id)"
+        - 
+          p: "trm:route"
+          o: 
+            - 
+              mapping: "routes"
+              condition: 
+                function: "equal"
+                parameters: 
+                  - 
+                    - "str1"
+                    - "$(route_id)"
+                  - 
+                    - "str2"
+                    - "$(route_id)"
+        - "trm:DayTypeRef,$(service_id)"
+        - 
+          p: "trm:service"
+          o: 
+            - 
+              mapping: "calendar"
+              condition: 
+                function: "equal"
+                parameters: 
+                  - 
+                    - "str1"
+                    - "$(service_id)"
+                  - 
+                    - "str2"
+                    - "$(service_id)"
+            - 
+              mapping: "calendar_dates"
+              condition: 
+                function: "equal"
+                parameters: 
+                  - 
+                    - "str1"
+                    - "$(service_id)"
+                  - 
+                    - "str2"
+                    - "$(service_id)"
+        - "trm:DestinationDisplayView,$(trip_headsign)"
+        - "trm:,$(trip_short_name)"
+        - "trm:DirectionRef,$(direction_id)"
+        - "trm:LinkSequenceProjection,$(shape_id)"
+        - 
+          p: "trm:shape"
+          o: 
+            - 
+              mapping: "shapes"
+              condition: 
+                function: "equal"
+                parameters: 
+                  - 
+                    - "str1"
+                    - "$(shape_id)"
+                  - 
+                    - "str2"
+                    - "$(shape_id)"
+        - "trm:,$(wheelchair_accessible)"

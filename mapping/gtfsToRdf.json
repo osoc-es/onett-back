@@ -9,8 +9,9 @@
   },
   "data":{
   "trips": {
-    "link":"",
+    "link":"trip",
     "type":"ServiceJourney",
+    "typePrefix":"trm",
     "id":"trip_id",
     "fields": {
       "route_id": {
@@ -51,6 +52,7 @@
       }
     }, 
     "joins":{
+      "fields":["service_id", "route_id", "shape_id"],
       "p":{
         "service":{
           "prefix":"trm",
@@ -66,6 +68,17 @@
                     "value":"service_id"
                   }
                 }
+              },
+              "calendar_dates":{
+                "function":"equal",
+                "parameters":{
+                  "str1":{
+                    "value":"service_id"
+                  },
+                  "str2":{
+                    "value":"service_id"
+                  }
+                }               
               }
             }
           }
@@ -112,6 +125,7 @@
   "fare_attributes": {
     "link":"",
     "type":"FareProduct",
+    "typePrefix":"trm",
     "id":"fare_id",
     "fields": {
       "price": {
@@ -146,6 +160,7 @@
   "agency": {
     "link":"",
     "type":"authority",
+    "typePrefix":"trm",
     "id":"agency_id",
     "fields": {
       "agency_name": {
@@ -184,6 +199,7 @@
   "stops": {
     "link":"",
     "type":"ScheduledStopPoint",
+    "typePrefix":"trm",
     "id":"stop_id",
     "fields": {
       "stop_code": {
@@ -246,6 +262,7 @@
   "stop_times": {
     "link":"",
     "type":"ServiceJourney",
+    "typePrefix":"trm",
     "id":"trip_id",
     "fields": {
       "arrival_time": {
@@ -286,6 +303,7 @@
       }
     },
     "joins":{
+      "fields":["trip_id", "stop_id"],
       "p":{
         "trip":{
           "prefix":"trm",
@@ -329,6 +347,8 @@
   "routes": {
     "link":"routes",
     "id":"route_id",
+    "type":"Line",
+    "typePrefix":"trm",
     "fields": {
       "route_short_name": {
         "rdf":"shortName",
@@ -364,6 +384,7 @@
       }
     },
     "joins":{
+      "fields":["agency_id"],
       "p":{
         "agency":{
           "prefix":"trm",
@@ -389,6 +410,7 @@
   "calendar": {
     "link":"",
     "type":"ServiceCalendarFrame",
+    "typePrefix":"trm",
     "id":"service_id",
     "fields": {
       "monday": {
@@ -435,6 +457,7 @@
   "calendar_dates": {
     "link":"",
     "type":"ServiceCalendarFrame",
+    "typePrefix":"trm",
     "id":"service_id",
     "fields": {
       "date": {
@@ -453,6 +476,7 @@
   "fare_rules": {
     "link":"",
     "type":"FareProduct",
+    "typePrefix":"trm",
     "id":"fare_id",
     "fields": {
       "route_id":{
@@ -479,6 +503,7 @@
   "shapes":{
     "link":"shapes",
     "type":"",
+    "typePrefix":"trm",
     "id":"shape_id",
     "fields":{
       "shape_pl_lat":{
@@ -505,6 +530,7 @@
   "frequencies":{
     "link":"frequency",
     "type":"Frequency",
+    "typePrefix":"trm",
     "id":"start_time",
     "fields":{
       "start_time":{
@@ -525,6 +551,7 @@
       }
     },
     "joins":{
+      "fields":["trip_id"],
       "p":{
         "trip":{
           "prefix":"trm",
@@ -550,6 +577,7 @@
   "transfer":{
     "link":"",
     "type":"",
+    "typePrefix":"trm",
     "id":"",
     "fields":{
       "from_stop_id":{
@@ -576,6 +604,7 @@
   "pathways": {
     "link":"",
     "type":"",
+    "typePrefix":"trm",
     "id":"",
     "fields": {
       "pathway_id": {
@@ -634,6 +663,7 @@
   "levels": {
     "link":"",
     "type":"",
+    "typePrefix":"trm",
     "id":"",
     "fields": {
       "level_id": {
@@ -656,6 +686,7 @@
   "feed_info": { 
     "link":"feed",
     "type":"",
+    "typePrefix":"trm",
     "id":"feed_publisher_name",
     "fields": {
       "feed_publisher_name": {

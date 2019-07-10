@@ -1,4 +1,5 @@
 const fs  = require('fs');
+const YAML = require('json2yaml')
 const lineByLine = require('n-readlines');
 const gtfsFieldChecker = require('../../mapping/gtfsFieldChecker.json');
 const gtfsToRdf = require('../../mapping/gtfsToRdf.json');
@@ -99,48 +100,103 @@ function readFirstLine(file, requiredFields){
 }
 function mappingGenerator(jsonFile, outputFileName){
 	//let filenames = Object.keys(jsonFile);
-	let filenames = ['agency', 'trips', 'stops'];
+	let jsonToYaml= {};
+	let filenames = ['trips'];
 	let subjectHead = gtfsToRdf["subjectHead"];
 	let outputFile = outputFileName + '.yarml';
-	let prefix = Object.keys(gtfsToRdf["prefixs"])[0];//PENSAR COMO HACER DISPLAY DE VARIOS PREFIJOS.
+	let prefixArray = Object.keys(gtfsToRdf["prefixs"]);//PENSAR COMO HACER DISPLAY DE VARIOS PREFIJOS.
+	let prefixsStr = '';
+	jsonToYaml["prefixes"] = {};
+	prefixArray.forEach(prefix => {
+		console.log(prefix);
+		jsonToYaml["prefixes"][prefix] = gtfsToRdf["prefixs"][prefix];
+		prefisxsStr = ` ${prefix} : ${gtfsToRdf["prefixs"][prefix]}\n`
+	})
+	jsonToYaml["mappings"] = {}
+/*	
 	let header  = `
 prefixes:
-  ${prefix} : ${gtfsToRdf["prefixs"][prefix]}
+  ${prefixsStr}
 mappings:\n`
+*/
+	/*
 	fs.appendFile(outputFile, header, (err) => {
 		if(err) console.log(err);
-	});
+	});*/
 //GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
-	filenames.forEach(file => {
+	filenames.forEach((file) => {
 		console.log('file: ' + file);
-		let source = `-[${file}.txt~txt]\n`;
+		jsonToYaml["mappings"][file] = {};
+		let source = `[${file}.txt~txt]`;
 		let type = gtfsToRdf["data"][file]["type"];
-		let s  = `s: ${subjectHead}PAIS/CIUDAD/TTRANSPORT/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})\n`;
-		let po = [];
+		let typePrefix = gtfsToRdf["data"][file]["typePrefix"];
+		let s  = `${subjectHead}PAIS/CIUDAD/TTRANSPORT/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})`;
+		let fieldsElements = Object.keys(gtfsToRdf["data"][file]["fields"]);
+		let joinsFields = gtfsToRdf["data"][file]["joins"]["fields"];
+		let pType = ["a",`${typePrefix}:${type}`]; 
+		let joinsElements = '';
+		console.log(joinsFields)
+		if(type == "")
+			pType = "";
+/*		
 		let poElement = `
   ${file}:
     sources:
      ${source}
     ${s}
     po:
-      - [a, ${prefix}:${type}]\n`;
-		fs.appendFile(outputFile, poElement, (err) =>{
-			if(err) console.log(err);
-		})
-		//USAMOS EL JSON gtfsToRdf PARA SELECCIONAR QUE REGLAS DEL MAPPING VAMOS A USAR EL ENGINE DE YARML TO RDF
+${pType}`;
+*/		
+		jsonToYaml["mappings"][file]["sources"] = [[source]];
+		jsonToYaml["mappings"][file]["s"] = s;
+		jsonToYaml["mappings"][file]["po"] = [];
+		//USAMOS EL JSON gtfsToRdf PARA SELECCIONAR QUE REGLAS DEL MAPPING VA A USAR EL ENGINE DE YARML TO RDF
 		jsonFile[file].forEach((field) => {
-			if(field != gtfsToRdf["data"][file]["id"]){
-			console.log("field: " + field);
-			poElement = `      - [${prefix}:${gtfsToRdf["data"][file]["fields"][field]["rdf"]},$(${field})]\n`//PENSAR EN COMO MANEJAR EL USO DE 2 PREFIJOS DISTINTOS, ¿MODIFICAR json, add un sub-campo prefix dentro de cada field?
-			fs.appendFile(outputFile, poElement, (err) =>{
-				if(err)
-					console.log(err);
-			});
+			if(fieldsElements.includes(field)){
+				console.log("field: " + field);
+				let prefix = gtfsToRdf["data"][file]["fields"][field]["prefix"];
+				//poElement += `      - [${prefix}:${gtfsToRdf["data"][file]["fields"][field]["rdf"]},$(${field})]\n`
+				jsonToYaml["mappings"][file]["po"].push(`[${prefix}:${gtfsToRdf["data"][file]["fields"][field]["rdf"]},$(${field})]`);
+			}if(joinsFields.includes(field)){
+				let pObject = {};
+				console.log("ENtro");
+				let pName = Object.keys(gtfsToRdf["data"][file]["joins"]["p"])[joinsFields.indexOf(field)];
+				let pPrefix = gtfsToRdf["data"][file]["joins"]["p"][pName]["prefix"];
+				let mappings = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"];
+				pObject["p"] = pPrefix +":" +pName;
+				pObject["o"] = [];
+				for (mapping in mappings){
+					let mapObject = {};
+					mapObject["mapping"] = mapping;
+					mapObject["condition"] = {};
+					mapObject["condition"]["function"] = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["function"];
+					mapObject["condition"]["parameters"] = [];
+					for (parameter in gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"]){
+						mapObject["condition"]["parameters"].push([parameter,`$(${gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"][parameter]["value"]})`]);
+					}
+					pObject["o"].push(mapObject);
+				}
+				jsonToYaml["mappings"][file]["po"].push(pObject);
+				/*
+				let params = mapping["parameters"].forEach((param) => {
+						let paramStr = `- [${param}, ${mapping["parameter"][param]}]`
+						return paramStr;
+					});
+				joinsElement += `- p: ${prefix} : pName\n` + 
+						`  o:\n`+
+						`    - mapping: ${}`
+				*/
 			}
-			
 		});
 	});
+	let Yaml = YAML.stringify(jsonToYaml);
+	console.log(Yaml);
+	fs.appendFile(outputFile, Yaml, (err) =>{
+		if(err)
+			console.log(err);
+	})
 }
+/*
 module.exports = {
 	jsonFileCounter, 
 	dirFileCounter,
@@ -150,8 +206,8 @@ module.exports = {
 	fieldChecker,
 	mappingGenerator
 }
+*/
 
-/*
 jsonFileCounter();
 dirFileCounter('uploads/CTRM_Madird_Spain_862019153/');
 if(requiredFilesChecker){
@@ -163,5 +219,5 @@ if(requiredFilesChecker){
 optionalFileChecker();
 sanitizeVerifiedFiles();
 let finalJson = fieldChecker('uploads/CTRM_Madird_Spain_862019153/');
-let finalYarml = mappingGenerator(finalJson);
-*/
+let finalYarml = mappingGenerator(finalJson, "works");
+

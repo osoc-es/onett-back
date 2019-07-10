@@ -17,8 +17,8 @@ mappings:
       - [trm:agencyUrl, $(agency_url)]
       - [trm:authorityTimezone ,$(agency_timezone)]
       - [trm:authorityLang,$(agency_lang)]
-#      - [trm:fareUrl, $(agency_fare_url)]
-#      - [trm:email , $(agency_email)]
+      - [trm:fareUrl, $(agency_fare_url)]
+      - [trm:email , $(agency_email)]
 
 #calendar
   calendar:
@@ -168,7 +168,7 @@ mappings:
       - [trm:shortName, $(route_short_name)]
       - [trm:name, $(route_long_name)]
       - [trm:description, $(route_desc)]
-#      - [trm:, $(route_type)]--> digitos de 0-7 que representa el tipo de transporte  
+      - [trm:, $(route_type)]--> digitos de 0-7 que representa el tipo de transporte  
       - [trm:Url, $(route_url)]
       - [trm:Colour, $(route_color)]
       - [trm:TextColour, $(route_text_color)]

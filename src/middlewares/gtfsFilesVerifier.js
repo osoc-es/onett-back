@@ -97,12 +97,12 @@ function readFirstLine(file, requiredFields){
 	}
 	return filledFields;
 }
-function mappingGenerator(jsonFile){
+function mappingGenerator(jsonFile, outputFileName){
 	//let filenames = Object.keys(jsonFile);
 	let filenames = ['agency', 'trips', 'stops'];
 	let subjectHead = gtfsToRdf["subjectHead"];
-	let outputFile = 'remove.yarml';
-	let prefix = Object.keys(gtfsToRdf["prefixs"])[0];
+	let outputFile = outputFileName + '.yarml';
+	let prefix = Object.keys(gtfsToRdf["prefixs"])[0];//PENSAR COMO HACER DISPLAY DE VARIOS PREFIJOS.
 	let header  = `
 prefixes:
   ${prefix} : ${gtfsToRdf["prefixs"][prefix]}
@@ -110,7 +110,7 @@ mappings:\n`
 	fs.appendFile(outputFile, header, (err) => {
 		if(err) console.log(err);
 	});
-
+//GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
 	filenames.forEach(file => {
 		console.log('file: ' + file);
 		let source = `-[${file}.txt~txt]\n`;
@@ -127,19 +127,31 @@ mappings:\n`
 		fs.appendFile(outputFile, poElement, (err) =>{
 			if(err) console.log(err);
 		})
+		//USAMOS EL JSON gtfsToRdf PARA SELECCIONAR QUE REGLAS DEL MAPPING VAMOS A USAR EL ENGINE DE YARML TO RDF
 		jsonFile[file].forEach((field) => {
 			if(field != gtfsToRdf["data"][file]["id"]){
 			console.log("field: " + field);
-			poElement = `      - [${prefix}:${gtfsToRdf["data"][file]["fields"][field]["rdf"]},$(${field})]\n`
+			poElement = `      - [${prefix}:${gtfsToRdf["data"][file]["fields"][field]["rdf"]},$(${field})]\n`//PENSAR EN COMO MANEJAR EL USO DE 2 PREFIJOS DISTINTOS, ¿MODIFICAR json, add un sub-campo prefix dentro de cada field?
 			fs.appendFile(outputFile, poElement, (err) =>{
 				if(err)
 					console.log(err);
 			});
 			}
-			//po.push(poElement);
+			
 		});
 	});
 }
+module.exports = {
+	jsonFileCounter, 
+	dirFileCounter,
+	requiredFilesChecker,
+	optionalFileChecker,
+	sanitizeVerifiedFiles,
+	fieldChecker,
+	mappingGenerator
+}
+
+/*
 jsonFileCounter();
 dirFileCounter('uploads/CTRM_Madird_Spain_862019153/');
 if(requiredFilesChecker){
@@ -152,3 +164,4 @@ optionalFileChecker();
 sanitizeVerifiedFiles();
 let finalJson = fieldChecker('uploads/CTRM_Madird_Spain_862019153/');
 let finalYarml = mappingGenerator(finalJson);
+*/

@@ -1,5 +1,5 @@
 const fs  = require('fs');
-const YAML = require('json2yaml')
+const YAML = require('yaml')
 const lineByLine = require('n-readlines');
 const gtfsFieldChecker = require('../../mapping/gtfsFieldChecker.json');
 const gtfsToRdf = require('../../mapping/gtfsToRdf.json');
@@ -99,18 +99,18 @@ function readFirstLine(file, requiredFields){
 	return filledFields;
 }
 function mappingGenerator(jsonFile, outputFileName){
-	//let filenames = Object.keys(jsonFile);
+	let filenames = Object.keys(jsonFile);
 	let jsonToYaml= {};
-	let filenames = ['trips'];
+	//let filenames = ['trips'];
 	let subjectHead = gtfsToRdf["subjectHead"];
-	let outputFile = outputFileName + '.yarml';
+	let outputFile = outputFileName + '.yaml';
 	let prefixArray = Object.keys(gtfsToRdf["prefixs"]);//PENSAR COMO HACER DISPLAY DE VARIOS PREFIJOS.
 	let prefixsStr = '';
 	jsonToYaml["prefixes"] = {};
 	prefixArray.forEach(prefix => {
 		console.log(prefix);
 		jsonToYaml["prefixes"][prefix] = gtfsToRdf["prefixs"][prefix];
-		prefisxsStr = ` ${prefix} : ${gtfsToRdf["prefixs"][prefix]}\n`
+		prefisxsStr = `${prefix} : ${gtfsToRdf["prefixs"][prefix]}\n`
 	})
 	jsonToYaml["mappings"] = {}
 /*	
@@ -133,11 +133,8 @@ mappings:\n`
 		let s  = `${subjectHead}PAIS/CIUDAD/TTRANSPORT/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})`;
 		let fieldsElements = Object.keys(gtfsToRdf["data"][file]["fields"]);
 		let joinsFields = gtfsToRdf["data"][file]["joins"]["fields"];
-		let pType = ["a",`${typePrefix}:${type}`]; 
+		let pType = `[a, ${typePrefix}:${type}]`; 
 		let joinsElements = '';
-		console.log(joinsFields)
-		if(type == "")
-			pType = "";
 /*		
 		let poElement = `
   ${file}:
@@ -147,17 +144,24 @@ mappings:\n`
     po:
 ${pType}`;
 */		
-		jsonToYaml["mappings"][file]["sources"] = [[source]];
+		jsonToYaml["mappings"][file]["sources"] = [source];
 		jsonToYaml["mappings"][file]["s"] = s;
 		jsonToYaml["mappings"][file]["po"] = [];
+		if(type != "")
+			jsonToYaml["mappings"][file]["po"].push(pType);
 		//USAMOS EL JSON gtfsToRdf PARA SELECCIONAR QUE REGLAS DEL MAPPING VA A USAR EL ENGINE DE YARML TO RDF
 		jsonFile[file].forEach((field) => {
 			if(fieldsElements.includes(field)){
 				console.log("field: " + field);
 				let prefix = gtfsToRdf["data"][file]["fields"][field]["prefix"];
 				//poElement += `      - [${prefix}:${gtfsToRdf["data"][file]["fields"][field]["rdf"]},$(${field})]\n`
-				jsonToYaml["mappings"][file]["po"].push(`[${prefix}:${gtfsToRdf["data"][file]["fields"][field]["rdf"]},$(${field})]`);
-			}if(joinsFields.includes(field)){
+				let rdfValue = `${gtfsToRdf["data"][file]["fields"][field]["rdf"]}`;
+				if(rdfValue != "")
+					jsonToYaml["mappings"][file]["po"].push(`[${prefix}:${rdfValue}, $(${field})]`);
+			}
+		});
+		jsonFile[file].forEach((field) => {
+			if(joinsFields != undefined && joinsFields.includes(field)){
 				let pObject = {};
 				console.log("ENtro");
 				let pName = Object.keys(gtfsToRdf["data"][file]["joins"]["p"])[joinsFields.indexOf(field)];
@@ -172,7 +176,7 @@ ${pType}`;
 					mapObject["condition"]["function"] = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["function"];
 					mapObject["condition"]["parameters"] = [];
 					for (parameter in gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"]){
-						mapObject["condition"]["parameters"].push([parameter,`$(${gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"][parameter]["value"]})`]);
+						mapObject["condition"]["parameters"].push(`[${parameter}, $(${gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"][parameter]["value"]})]`);
 					}
 					pObject["o"].push(mapObject);
 				}
@@ -189,9 +193,14 @@ ${pType}`;
 			}
 		});
 	});
-	let Yaml = YAML.stringify(jsonToYaml);
-	console.log(Yaml);
-	fs.appendFile(outputFile, Yaml, (err) =>{
+	let Yaml = YAML.stringify(jsonToYaml, options={'anchorPrefix':'a0'});
+	let sanitizedYaml = '';
+	for(i in Yaml){
+		if(Yaml[i] != '\"')
+			sanitizedYaml += Yaml[i];
+	}
+	console.log(sanitizedYaml);
+	fs.writeFile(outputFile, sanitizedYaml, (err) =>{
 		if(err)
 			console.log(err);
 	})

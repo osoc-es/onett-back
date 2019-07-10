@@ -98,36 +98,22 @@ function readFirstLine(file, requiredFields){
 	}
 	return filledFields;
 }
-function mappingGenerator(jsonFile, outputFileName){
+function mappingGenerator(jsonFile, outputFileName, path, extension){
 	let filenames = Object.keys(jsonFile);
 	let jsonToYaml= {};
-	//let filenames = ['trips'];
 	let subjectHead = gtfsToRdf["subjectHead"];
 	let outputFile = outputFileName + '.yaml';
 	let prefixArray = Object.keys(gtfsToRdf["prefixs"]);//PENSAR COMO HACER DISPLAY DE VARIOS PREFIJOS.
 	let prefixsStr = '';
 	jsonToYaml["prefixes"] = {};
 	prefixArray.forEach(prefix => {
-		console.log(prefix);
 		jsonToYaml["prefixes"][prefix] = gtfsToRdf["prefixs"][prefix];
-		prefisxsStr = `${prefix} : ${gtfsToRdf["prefixs"][prefix]}\n`
 	})
 	jsonToYaml["mappings"] = {}
-/*	
-	let header  = `
-prefixes:
-  ${prefixsStr}
-mappings:\n`
-*/
-	/*
-	fs.appendFile(outputFile, header, (err) => {
-		if(err) console.log(err);
-	});*/
 //GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
 	filenames.forEach((file) => {
-		console.log('file: ' + file);
 		jsonToYaml["mappings"][file] = {};
-		let source = `[${file}.txt~txt]`;
+		let source = `[${path}${file}.${extension}~${extension}]`;
 		let type = gtfsToRdf["data"][file]["type"];
 		let typePrefix = gtfsToRdf["data"][file]["typePrefix"];
 		let s  = `${subjectHead}PAIS/CIUDAD/TTRANSPORT/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})`;
@@ -135,15 +121,7 @@ mappings:\n`
 		let joinsFields = gtfsToRdf["data"][file]["joins"]["fields"];
 		let pType = `[a, ${typePrefix}:${type}]`; 
 		let joinsElements = '';
-/*		
-		let poElement = `
-  ${file}:
-    sources:
-     ${source}
-    ${s}
-    po:
-${pType}`;
-*/		
+
 		jsonToYaml["mappings"][file]["sources"] = [source];
 		jsonToYaml["mappings"][file]["s"] = s;
 		jsonToYaml["mappings"][file]["po"] = [];
@@ -154,7 +132,6 @@ ${pType}`;
 			if(fieldsElements.includes(field)){
 				console.log("field: " + field);
 				let prefix = gtfsToRdf["data"][file]["fields"][field]["prefix"];
-				//poElement += `      - [${prefix}:${gtfsToRdf["data"][file]["fields"][field]["rdf"]},$(${field})]\n`
 				let rdfValue = `${gtfsToRdf["data"][file]["fields"][field]["rdf"]}`;
 				if(rdfValue != "")
 					jsonToYaml["mappings"][file]["po"].push(`[${prefix}:${rdfValue}, $(${field})]`);
@@ -163,7 +140,6 @@ ${pType}`;
 		jsonFile[file].forEach((field) => {
 			if(joinsFields != undefined && joinsFields.includes(field)){
 				let pObject = {};
-				console.log("ENtro");
 				let pName = Object.keys(gtfsToRdf["data"][file]["joins"]["p"])[joinsFields.indexOf(field)];
 				let pPrefix = gtfsToRdf["data"][file]["joins"]["p"][pName]["prefix"];
 				let mappings = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"];
@@ -181,15 +157,6 @@ ${pType}`;
 					pObject["o"].push(mapObject);
 				}
 				jsonToYaml["mappings"][file]["po"].push(pObject);
-				/*
-				let params = mapping["parameters"].forEach((param) => {
-						let paramStr = `- [${param}, ${mapping["parameter"][param]}]`
-						return paramStr;
-					});
-				joinsElement += `- p: ${prefix} : pName\n` + 
-						`  o:\n`+
-						`    - mapping: ${}`
-				*/
 			}
 		});
 	});
@@ -205,18 +172,22 @@ ${pType}`;
 			console.log(err);
 	})
 }
-/*
-module.exports = {
-	jsonFileCounter, 
-	dirFileCounter,
-	requiredFilesChecker,
-	optionalFileChecker,
-	sanitizeVerifiedFiles,
-	fieldChecker,
-	mappingGenerator
+function dynamicRdfMapGenerator(path, outputFileName){
+	let finalYarrrml = null;
+	jsonFileCounter();
+	dirFileCounter(path);
+	if(requiredFilesChecker()){
+		optionalFileChecker();
+		sanitizeVerifiedFiles();
+		let finalJson = fieldChecker(path);
+		finalYarrrml = mappingGenerator(finalJson, outputFileName, path, 'txt');
+	}
+	return finalYarrrml;
 }
-*/
-
+module.exports = {
+	dynamicRdfMapGenerator
+}
+/*
 jsonFileCounter();
 dirFileCounter('uploads/CTRM_Madird_Spain_862019153/');
 if(requiredFilesChecker){
@@ -229,4 +200,4 @@ optionalFileChecker();
 sanitizeVerifiedFiles();
 let finalJson = fieldChecker('uploads/CTRM_Madird_Spain_862019153/');
 let finalYarml = mappingGenerator(finalJson, "works");
-
+*/

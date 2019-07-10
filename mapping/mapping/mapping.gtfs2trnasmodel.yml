@@ -9,7 +9,7 @@ mappings:
 #agency
   agency:
     sources:
-      - ['gtfs/agency.csv~csv']
+      - ['../gtfs/agency.csv~csv']
     s: https://w3id.org/transmodel/resource/pais/ciudad/tipo_trasporte/authority/$(agency_id)
     po:
       - [a, trm:authority]
@@ -23,7 +23,7 @@ mappings:
 #calendar
   calendar:
     sources:
-      - ['gtfs/calendar.csv~csv']
+      - ['../gtfs/calendar.csv~csv']
     s: https://w3id.org/transmodel/resource/service/$(service_id)
     po:
       - [a, trm:ServiceCalendarFrame]
@@ -39,7 +39,7 @@ mappings:
 #calendar_dates 
   calendar_dates:
     sources:
-      - ['gtfs/calendar_dates.csv~csv']
+      - ['../gtfs/calendar_dates.csv~csv']
     s: https://w3id.org/transmodel/resource/dates/$(service_id)
     po:
       - [a, trm:ServiceCalendarFrame]
@@ -49,7 +49,7 @@ mappings:
 #fare_attributes      
   fare_attributes:
     sources:
-      - ['gtfs/fare_attributes.csv~csv']
+      - ['../gtfs/fare_attributes.csv~csv']
     s: https://w3id.org/transmodel/resource/fare_attributes/$(fare_id)
     po:
       - [a, trm:FareProduct]
@@ -62,7 +62,7 @@ mappings:
 #fare_rules
   fare_rules:
     sources:
-      - ['gtfs/fare_rules.csv~csv']
+      - ['../gtfs/fare_rules.csv~csv']
     s: https://w3id.org/transmodel/resource/fare_rules/$(fare_id)
     po:
       - [a, trm:FareProduct]
@@ -75,7 +75,7 @@ mappings:
 #feed_info
   feed_info:
     sources:
-      - ['gtfs/feed_info.csv~csv']
+      - ['../gtfs/feed_info.csv~csv']
     s: https://w3id.org/transmodel/resource/feed/$(feed_publisher_name) 
     po:
       - [dct:publisher,$(feed_publisher_name)]
@@ -91,7 +91,7 @@ mappings:
 #shapes
   shapes:
     sources:
-      - ['gtfs/shapes.csv~csv']
+      - ['../gtfs/shapes.csv~csv']
     s: https://w3id.org/transmodel/resource/shapes/$(shape_id)
     po:
     - [geo:lat ,$(shape_pt_lat)]
@@ -102,7 +102,7 @@ mappings:
 #stops
   stops:
     sources:
-      - ['gtfs/stops.csv~csv']
+      - ['../gtfs/stops.csv~csv']
     s: https://w3id.org/transmodel/resource/stops/$(stop_id)
     po:
       - [a, trm:ScheduledStopPoint]
@@ -117,7 +117,7 @@ mappings:
 #trips
   trips:
     sources:
-      - ['gtfs/trips.csv~csv']
+      - ['../gtfs/trips.csv~csv']
     s: https://w3id.org/transmodel/resource/trips/$(trip_id)
     po:
       - [a, trm:ServiceJourney]
@@ -161,7 +161,7 @@ mappings:
 
   routes:
     sources:
-      - ['gtfs/routes.csv~csv']
+      - ['../gtfs/routes.csv~csv']
     s: https://w3id.org/transmodel/resource/routes/$(route_id)
     po:
       - [a, trm:Line]
@@ -184,7 +184,7 @@ mappings:
 #frequencies
   frequencies:
     sources:
-      - ['gtfs/frequencies.csv~csv']
+      - ['../gtfs/frequencies.csv~csv']
     s: https://w3id.org/transmodel/resource/frequency/$(start_time)
     po:
       - [a, trm:Frequency]
@@ -203,7 +203,7 @@ mappings:
 #stop_times
   stop_times:
     sources:
-      - ['gtfs/stop_times.csv~csv']
+      - ['../gtfs/stop_times.csv~csv']
     s: https://w3id.org/transmodel/resource/stop_times/$(trip_id)
     po:
       - [a, trm:ServiceJourney]

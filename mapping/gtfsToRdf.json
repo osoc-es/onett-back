@@ -1,7 +1,11 @@
 {
   "subjectHead":"https://w3id.org/transmodel/resource/",
   "prefixs":{
-    "trm":"https://w3id.org/transmodel/terms#"
+    "trm":"https://w3id.org/transmodel/terms#",
+    "geo":"http://www.w3.org/2003/01/geo/wgs84_pos#",
+    "dct":"http://purl.org/dc/terms/",
+    "foaf":"http://xmlns.com/foaf/0.1/",
+    "schema":"http://schema.org/"
   },
   "data":{
   "trips": {
@@ -10,31 +14,98 @@
     "id":"trip_id",
     "fields": {
       "route_id": {
-        "rdf":"lineRef"
+        "rdf":"lineRef",
+        "prefix":"trm"
       },
       "service_id": {
-        "rdf":"DayTypeRef"
+        "rdf":"DayTypeRef",
+        "prefix":"trm"
       },
       "trip_headsign": {
-        "rdf":"DestinationDisplayView"
+        "rdf":"DestinationDisplayView",
+        "prefix":"trm"
       },
       "trip_short_name": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "direction_id": {
-        "rdf":"DirectionRef"
+        "rdf":"DirectionRef",
+        "prefix":"trm"
       },
       "block_id": {
-        "rdf":"BlockRef"
+        "rdf":"BlockRef",
+        "prefix":"trm"
       },
       "shape_id": {
-        "rdf":"LinkSequenceProjection"
+        "rdf":"LinkSequenceProjection",
+        "prefix":"trm"
       },
       "wheelchair_accessible": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "bikes_allowed": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
+      }
+    }, 
+    "joins":{
+      "p":{
+        "service":{
+          "prefix":"trm",
+          "o":{
+            "mapping":{
+              "calendar":{
+                "function":"equal",
+                "parameters":{
+                  "str1":{
+                    "value":"service_id"
+                  },
+                  "str2":{
+                    "value":"service_id"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "route":{
+          "prefix":"trm",
+          "o":{
+            "mapping":{
+              "routes":{
+                "function":"equal",
+                "parameters":{
+                  "str1":{
+                    "value":"route_id"
+                  },
+                  "str2":{
+                    "value":"route_id"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "shape":{
+          "prefix":"trm",
+          "o":{
+            "mapping":{
+              "shapes":{
+                "function":"equal",
+                "parameters":{
+                  "str1":{
+                    "value":"shape_id"
+                  },
+                  "str2":{
+                    "value":"shape_id"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -44,23 +115,32 @@
     "id":"fare_id",
     "fields": {
       "price": {
-        "rdf":"FareProductPrice"
+        "rdf":"FareProductPrice",
+        "prefix":"trm"
       },
       "currency_type": {
-        "rdf":"Currency"
+        "rdf":"Currency",
+        "prefix":"trm"
       },
       "payment_method": {
-        "rdf":"ChargingMoment"
+        "rdf":"ChargingMoment",
+        "prefix":"trm"
       },
       "transfers": {
-        "rdf":"transfers"
+        "rdf":"transfers",
+        "prefix":"trm"
       },
       "transfer_duration": {
-        "rdf":"StandardDuration"
+        "rdf":"StandardDuration",
+        "prefix":"trm"
       },
       "agency_id": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+      
     }
   },
   "agency": {
@@ -69,26 +149,36 @@
     "id":"agency_id",
     "fields": {
       "agency_name": {
-        "rdf":"authorityName"
+        "rdf":"authorityName",
+        "prefix":"trm"
       },
       "agency_url": {
-        "rdf":"agencyUrl"
+        "rdf":"agencyUrl",
+        "prefix":"trm"
       },
       "agency_timezone": {
-        "rdf":"authorityTimezone"
+        "rdf":"authorityTimezone",
+        "prefix":"trm"
       },
       "agency_lang": {
-        "rdf":"authorityLang"
+        "rdf":"authorityLang",
+        "prefix":"trm"
       },
       "agency_phone": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "agency_fare_url": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "agency_email": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+      
     }
   },
   "stops": {
@@ -97,44 +187,60 @@
     "id":"stop_id",
     "fields": {
       "stop_code": {
-        "rdf":"PublicCode"
+        "rdf":"PublicCode",
+        "prefix":"trm"
       },
       "stop_name": {
-        "rdf":"Name"
+        "rdf":"Name",
+        "prefix":"trm"
       },
       "stop_desc": {
-        "rdf":"Description"
+        "rdf":"Description",
+        "prefix":"trm"
       },
       "stop_lat": {
-        "rdf":"Latitude"
+        "rdf":"Latitude",
+        "prefix":"trm"
       },
       "stop_lon": {
-        "rdf":"Longitud"
+        "rdf":"Longitud",
+        "prefix":"trm"
       },
       "zone_id": {
-        "rdf":"TariffZoneRef"
+        "rdf":"TariffZoneRef",
+        "prefix":"trm"
       },
       "stop_url": {
-        "rdf":"Url"
+        "rdf":"Url",
+        "prefix":"trm"
       },
       "location_type": {
-        "rdf":"StopPlace"
+        "rdf":"StopPlace",
+        "prefix":"trm"
       },
       "parent_sation": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "stop_timezone": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "wheelchair_boarding": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "level_id": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "platform_code": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+
     }
   },
   "stop_times": {
@@ -143,66 +249,140 @@
     "id":"trip_id",
     "fields": {
       "arrival_time": {
-        "rdf":"arrivalTime"
+        "rdf":"arrivalTime",
+        "prefix":"trm"
       },
       "departure_time": {
-        "rdf":"Departure"
+        "rdf":"Departure",
+        "prefix":"trm"
       },
       "stop_id": {
-        "rdf":"ScheduledStopPointRef"
+        "rdf":"ScheduledStopPointRef",
+        "prefix":"trm"
       },
       "stop_sequence": {
-        "rdf":"stopSequence"
+        "rdf":"stopSequence",
+        "prefix":"trm"
       },
       "stop_headsign": {
-        "rdf":"DestinationDisplayView"
+        "rdf":"DestinationDisplayView",
+        "prefix":"trm"
       },
       "pickup_type": {
-        "rdf":"ForBoarding"
+        "rdf":"ForBoarding",
+        "prefix":"trm"
       },
       "drop_off_type": {
-        "rdf":"ForAlighting"
+        "rdf":"ForAlighting",
+        "prefix":"trm"
       },
       "shape_dist_traveled": {
-        "rdf":"OnwardLink"
+        "rdf":"OnwardLink",
+        "prefix":"trm"
       },
       "timepoint": {
-        "rdf":"TariffZoneRef"
+        "rdf":"TariffZoneRef",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+      "p":{
+        "trip":{
+          "prefix":"trm",
+          "o":{
+            "mapping":{
+              "trips":{
+                "function":"equal",
+                "parameters":{
+                  "str1":{
+                    "value":"trip_id"
+                  },
+                  "str2":{
+                    "value":"trip_id"
+                  }
+                }
+              }              
+            }
+          }
+        },
+        "stop":{
+          "prefix":"trm",
+          "o":{
+            "mapping":{
+              "stops":{
+                "function":"equal",
+                "parameters":{
+                  "str1":{
+                    "value":"stop_id"
+                  },
+                  "str2":{
+                    "value":"stop_id"
+                  }
+                }
+              }
+            }
+          }
+        }        
+      }    
     }
   },
   "routes": {
-    "link":"",
-    "id":"",
+    "link":"routes",
+    "id":"route_id",
     "fields": {
-      "route_id": {
-      },
-      "agency_id": {
-        
-      },
       "route_short_name": {
-        
+        "rdf":"shortName",
+        "prefix":"trm"
       },
       "route_long_name": {
-        
+        "rdf":"name",
+        "prefix":"trm"
       },
       "route_desc": {
-        
+        "rdf":"description",
+        "prefix":"trm"
       },
       "route_type": {
-        
+        "rdf":"",
+        "prefix":"trm"
       },
       "route_url": {
-        
+        "rdf":"Url",
+        "prefix":"trm"
       },
       "route_color": {
-        
+        "rdf":"Colour",
+        "prefix":"trm"
       },
       "route_text_color": {
-        
+        "rdf":"TextColour",
+        "prefix":"trm"
       },
       "route_sort_order": {
-        
+        "rdf":"",
+        "prefix":"trm"
+      }
+    },
+    "joins":{
+      "p":{
+        "agency":{
+          "prefix":"trm",
+          "o":{
+            "mapping":{
+              "trips":{
+                "function":"equal",
+                "parameters":{
+                  "str1":{
+                    "value":"agency_id"
+                  },
+                  "str2":{
+                    "value":"agency_id"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -212,32 +392,44 @@
     "id":"service_id",
     "fields": {
       "monday": {
-        "rdf":"DaysOfWeek"
+        "rdf":"DaysOfWeek",
+        "prefix":"trm"
       },
       "tuesday": {
-        "rdf":"DaysOfWeek"
+        "rdf":"DaysOfWeek",
+        "prefix":"trm"
       },
       "wednesday": {
-        "rdf":"DaysOfWeek"
+        "rdf":"DaysOfWeek",
+        "prefix":"trm"
       },
       "thursday": {
-        "rdf":"DaysOfWeek"
+        "rdf":"DaysOfWeek",
+        "prefix":"trm"
       },
       "friday": {
-        "rdf":"DaysOfWeek"
+        "rdf":"DaysOfWeek",
+        "prefix":"trm"
       },
       "saturday": {
-        "rdf":"DaysOfWeek"
+        "rdf":"DaysOfWeek",
+        "prefix":"trm"
       },
       "sunday": {
-        "rdf":"DaysOfWeek"
+        "rdf":"DaysOfWeek",
+        "prefix":"trm"
       },
       "start_date": {
-        "rdf":"FromDate"
+        "rdf":"FromDate",
+        "prefix":"trm"
       },
       "end_date": {
-        "rdf":"ToDate"
+        "rdf":"ToDate",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+      
     }
   },
   "calendar_dates": {
@@ -246,11 +438,16 @@
     "id":"service_id",
     "fields": {
       "date": {
-        "rdf":"ToDate"
+        "rdf":"ToDate",
+        "prefix":"trm"
       },
       "exception_type": {
-        "rdf":"IsAvailble"
+        "rdf":"IsAvailble",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+      
     }
   },
   "fare_rules": {
@@ -259,63 +456,96 @@
     "id":"fare_id",
     "fields": {
       "route_id":{
-        "rdf":"GroupOfLinesRef"
+        "rdf":"GroupOfLinesRef",
+        "prefix":"trm"
       },
       "origin_id":{
-        "rdf":"StartTariffZoneRef"
+        "rdf":"StartTariffZoneRef",
+        "prefix":"trm"
       }, 
       "destination_id":{
-        "rdf":"EndTariffZoneRef"
+        "rdf":"EndTariffZoneRef",
+        "prefix":"trm"
       },
       "contains_id":{
-        "rdf":"TariffZoneRef"
+        "rdf":"TariffZoneRef",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+      
     }
   },
   "shapes":{
-    "link":"",
+    "link":"shapes",
     "type":"",
-    "id":"",
+    "id":"shape_id",
     "fields":{
-      "shape_id":{
-        "rdf":""
-      },
       "shape_pl_lat":{
-        "rdf":""
+        "geo":"lat",
+        "prefix":"trm"
       },
       "shape_pt_lon":{
-        "rdf":""
+        "geo":"lon",
+        "prefix":"trm"
       },
       "shape_pt_sequence":{
-        "rdf":""
+        "rdf":"sequence",
+        "prefix":"trm"
       },
       "shape_dist_traveled":{
-        "rdf":""
+        "rdf":"distance",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+      
     }
   },
   "frequencies":{
-    "link":"",
-    "type":"",
-    "id":"",
+    "link":"frequency",
+    "type":"Frequency",
+    "id":"start_time",
     "fields":{
-      "trip_id":{
-        "rdf":""
-      },
       "start_time":{
-        "rdf":""
+        "rdf":"FirstDepartureTime",
+        "prefix":"trm"
       },
       "end_time":{
-        "rdf":""
+        "rdf":"LastDepartureTime",
+        "prefix":"trm"
       },
       "headway_secs":{
-        "rdf":""
+        "rdf":"ScheduledHeadwayInterval",
+        "prefix":"trm"
       },
       "exac_times":{
-        "rdf":""
+        "rdf":"exactTimes",
+        "prefix":"trm"
+      }
+    },
+    "joins":{
+      "p":{
+        "trip":{
+          "prefix":"trm",
+          "o":{
+            "mapping":{
+              "trips":{
+                "function":"equal",
+                "parameters":{
+                  "str1":{
+                    "value":"trip_id"
+                  },
+                  "str2":{
+                    "value":"trip_id"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
-
   },
   "transfer":{
     "link":"",
@@ -323,17 +553,24 @@
     "id":"",
     "fields":{
       "from_stop_id":{
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "to_stop_id":{
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "trasnfer_type":{
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "min_trasnfer_time":{
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+      
     }    
   }, 
   "pathways": {
@@ -342,41 +579,56 @@
     "id":"",
     "fields": {
       "pathway_id": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "from_stop_id": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "to_stop_id": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "pathway_mode": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "is_bidirectional": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "length": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "traversal_time": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "stair_count": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "max_slope": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "min_width": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "signposted_as": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "reversed_signposted_as": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+      
     }
   },
   "levels": {
@@ -385,44 +637,59 @@
     "id":"",
     "fields": {
       "level_id": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "level_index": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       },
       "level_name": {
-        "rdf":""
+        "rdf":"",
+        "prefix":"trm"
       }
+    },
+    "joins":{
+      
     }
   },
   "feed_info": { 
-    "link":"",
+    "link":"feed",
     "type":"",
-    "id":"",
+    "id":"feed_publisher_name",
     "fields": {
       "feed_publisher_name": {
-        "rdf":""
+        "rdf":"publisher",
+        "prefix":"dct"
       },
       "feed_publisher_url": {
-        "rdf":""
+        "rdf":"page",
+        "prefix":"foaf"
       },
       "feed_lang": {
-        "rdf":""
+        "rdf":"language",
+        "prefix":"dct"
       },
       "feed_start_date": {
-        "rdf":""
+        "rdf":"startDate",
+        "prefix":"schema"
       },
       "feed_version": {
-        "rdf":""
+        "rdf":"version",
+        "prefix":"schema"
       },
       "feed_contact_email": {
-        "rdf":""
+        "rdf":"ContactPoint",
+        "prefix":"schema"
       },
       "feed_contact_url": {
-        "rdf":""
+        "rdf":"ContactPoint",
+        "prefix":"schema"
       }
+    },
+    "joins":{
+      
     }
   }
 }
-
 }

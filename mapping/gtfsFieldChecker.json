@@ -1,695 +1,417 @@
 {
-  "subjectHead":"https://w3id.org/transmodel/resource/",
-  "prefixs":{
-    "trm":"https://w3id.org/transmodel/terms#",
-    "geo":"http://www.w3.org/2003/01/geo/wgs84_pos#",
-    "dct":"http://purl.org/dc/terms/",
-    "foaf":"http://xmlns.com/foaf/0.1/",
-    "schema":"http://schema.org/"
-  },
-  "data":{
   "trips": {
-    "link":"",
-    "type":"ServiceJourney",
-    "id":"trip_id",
+    "type": "required",
     "fields": {
       "route_id": {
-        "rdf":"lineRef",
-        "prefix":"trm"
+        "type": "required"
       },
       "service_id": {
-        "rdf":"DayTypeRef",
-        "prefix":"trm"
+        "type": "required"
+      },
+      "trip_id": {
+        "type": "required"
       },
       "trip_headsign": {
-        "rdf":"DestinationDisplayView",
-        "prefix":"trm"
+        "type": "optional"
       },
       "trip_short_name": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "direction_id": {
-        "rdf":"DirectionRef",
-        "prefix":"trm"
+        "type": "optional"
       },
       "block_id": {
-        "rdf":"BlockRef",
-        "prefix":"trm"
+        "type": "optional"
       },
       "shape_id": {
-        "rdf":"LinkSequenceProjection",
-        "prefix":"trm"
+        "type": "optional"
       },
       "wheelchair_accessible": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "bikes_allowed": {
-        "rdf":"",
-        "prefix":"trm"
-      }
-    }, 
-    "joins":{
-      "p":{
-        "service":{
-          "prefix":"trm",
-          "o":{
-            "mapping":{
-              "calendar":{
-                "function":"equal",
-                "parameters":{
-                  "str1":{
-                    "value":"service_id"
-                  },
-                  "str2":{
-                    "value":"service_id"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "route":{
-          "prefix":"trm",
-          "o":{
-            "mapping":{
-              "routes":{
-                "function":"equal",
-                "parameters":{
-                  "str1":{
-                    "value":"route_id"
-                  },
-                  "str2":{
-                    "value":"route_id"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "shape":{
-          "prefix":"trm",
-          "o":{
-            "mapping":{
-              "shapes":{
-                "function":"equal",
-                "parameters":{
-                  "str1":{
-                    "value":"shape_id"
-                  },
-                  "str2":{
-                    "value":"shape_id"
-                  }
-                }
-              }
-            }
-          }
-        }
+        "type": "optional"
       }
     }
   },
   "fare_attributes": {
-    "link":"",
-    "type":"FareProduct",
-    "id":"fare_id",
+    "type": "optional",
     "fields": {
+      "fare_id": {
+        "type": "required"
+      },
       "price": {
-        "rdf":"FareProductPrice",
-        "prefix":"trm"
+        "type": "required"
       },
       "currency_type": {
-        "rdf":"Currency",
-        "prefix":"trm"
+        "type": "required"
       },
       "payment_method": {
-        "rdf":"ChargingMoment",
-        "prefix":"trm"
+        "type": "required"
       },
       "transfers": {
-        "rdf":"transfers",
-        "prefix":"trm"
+        "type": "required"
       },
       "transfer_duration": {
-        "rdf":"StandardDuration",
-        "prefix":"trm"
+        "type": "required"
       },
       "agency_id": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "conditional"
       }
-    },
-    "joins":{
-      
     }
   },
   "agency": {
-    "link":"",
-    "type":"authority",
-    "id":"agency_id",
+    "type": "required",
     "fields": {
+      "agency_id": {
+        "type": "required"
+      },
       "agency_name": {
-        "rdf":"authorityName",
-        "prefix":"trm"
+        "type": "required"
       },
       "agency_url": {
-        "rdf":"agencyUrl",
-        "prefix":"trm"
+        "type": "required"
       },
       "agency_timezone": {
-        "rdf":"authorityTimezone",
-        "prefix":"trm"
+        "type": "required"
       },
       "agency_lang": {
-        "rdf":"authorityLang",
-        "prefix":"trm"
+        "type": "optional"
       },
       "agency_phone": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "agency_fare_url": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "agency_email": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       }
-    },
-    "joins":{
-      
     }
   },
   "stops": {
-    "link":"",
-    "type":"ScheduledStopPoint",
-    "id":"stop_id",
+    "type": "required",
     "fields": {
+      "stop_id": {
+        "type": "required"
+      },
       "stop_code": {
-        "rdf":"PublicCode",
-        "prefix":"trm"
+        "type": "optional"
       },
       "stop_name": {
-        "rdf":"Name",
-        "prefix":"trm"
+        "type": "conditional"
       },
       "stop_desc": {
-        "rdf":"Description",
-        "prefix":"trm"
+        "type": "optional"
       },
       "stop_lat": {
-        "rdf":"Latitude",
-        "prefix":"trm"
+        "type": "conditional"
       },
       "stop_lon": {
-        "rdf":"Longitud",
-        "prefix":"trm"
+        "type": "conditional"
       },
       "zone_id": {
-        "rdf":"TariffZoneRef",
-        "prefix":"trm"
+        "type": "conditional"
       },
       "stop_url": {
-        "rdf":"Url",
-        "prefix":"trm"
+        "type": "optional"
       },
       "location_type": {
-        "rdf":"StopPlace",
-        "prefix":"trm"
+        "type": "optional"
       },
       "parent_sation": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "conditional"
       },
       "stop_timezone": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "wheelchair_boarding": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "level_id": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "platform_code": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       }
-    },
-    "joins":{
-
     }
   },
   "stop_times": {
-    "link":"",
-    "type":"ServiceJourney",
-    "id":"trip_id",
+    "type": "required",
     "fields": {
+      "trip_id": {
+        "type": "required"
+      },
       "arrival_time": {
-        "rdf":"arrivalTime",
-        "prefix":"trm"
+        "type": "conditional"
       },
       "departure_time": {
-        "rdf":"Departure",
-        "prefix":"trm"
+        "type": "conditional"
       },
       "stop_id": {
-        "rdf":"ScheduledStopPointRef",
-        "prefix":"trm"
+        "type": "required"
       },
       "stop_sequence": {
-        "rdf":"stopSequence",
-        "prefix":"trm"
+        "type": "required"
       },
       "stop_headsign": {
-        "rdf":"DestinationDisplayView",
-        "prefix":"trm"
+        "type": "optional"
       },
       "pickup_type": {
-        "rdf":"ForBoarding",
-        "prefix":"trm"
+        "type": "optional"
       },
       "drop_off_type": {
-        "rdf":"ForAlighting",
-        "prefix":"trm"
+        "type": "optional"
       },
       "shape_dist_traveled": {
-        "rdf":"OnwardLink",
-        "prefix":"trm"
+        "type": "optional"
       },
       "timepoint": {
-        "rdf":"TariffZoneRef",
-        "prefix":"trm"
+        "type": "optional"
       }
-    },
-    "joins":{
-      "p":{
-        "trip":{
-          "prefix":"trm",
-          "o":{
-            "mapping":{
-              "trips":{
-                "function":"equal",
-                "parameters":{
-                  "str1":{
-                    "value":"trip_id"
-                  },
-                  "str2":{
-                    "value":"trip_id"
-                  }
-                }
-              }              
-            }
-          }
-        },
-        "stop":{
-          "prefix":"trm",
-          "o":{
-            "mapping":{
-              "stops":{
-                "function":"equal",
-                "parameters":{
-                  "str1":{
-                    "value":"stop_id"
-                  },
-                  "str2":{
-                    "value":"stop_id"
-                  }
-                }
-              }
-            }
-          }
-        }        
-      }    
     }
   },
   "routes": {
-    "link":"routes",
-    "id":"route_id",
+    "type": "required",
     "fields": {
+      "route_id": {
+        "type": "requried"
+      },
+      "agency_id": {
+        "type": "conditional"
+      },
       "route_short_name": {
-        "rdf":"shortName",
-        "prefix":"trm"
+        "type": "conditional"
       },
       "route_long_name": {
-        "rdf":"name",
-        "prefix":"trm"
+        "type": "optional"
       },
       "route_desc": {
-        "rdf":"description",
-        "prefix":"trm"
+        "type": "optional"
       },
       "route_type": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "required"
       },
       "route_url": {
-        "rdf":"Url",
-        "prefix":"trm"
+        "type": "optional"
       },
       "route_color": {
-        "rdf":"Colour",
-        "prefix":"trm"
+        "type": "optional"
       },
       "route_text_color": {
-        "rdf":"TextColour",
-        "prefix":"trm"
+        "type": "optional"
       },
       "route_sort_order": {
-        "rdf":"",
-        "prefix":"trm"
-      }
-    },
-    "joins":{
-      "p":{
-        "agency":{
-          "prefix":"trm",
-          "o":{
-            "mapping":{
-              "trips":{
-                "function":"equal",
-                "parameters":{
-                  "str1":{
-                    "value":"agency_id"
-                  },
-                  "str2":{
-                    "value":"agency_id"
-                  }
-                }
-              }
-            }
-          }
-        }
+        "type": "optional"
       }
     }
   },
   "calendar": {
-    "link":"",
-    "type":"ServiceCalendarFrame",
-    "id":"service_id",
+    "type": "required",
     "fields": {
+      "service_id": {
+        "type": "required"
+      },
       "monday": {
-        "rdf":"DaysOfWeek",
-        "prefix":"trm"
+        "type": "required"
       },
       "tuesday": {
-        "rdf":"DaysOfWeek",
-        "prefix":"trm"
+        "type": "required"
       },
       "wednesday": {
-        "rdf":"DaysOfWeek",
-        "prefix":"trm"
+        "type": "required"
       },
       "thursday": {
-        "rdf":"DaysOfWeek",
-        "prefix":"trm"
+        "type": "required"
       },
       "friday": {
-        "rdf":"DaysOfWeek",
-        "prefix":"trm"
+        "type": "required"
       },
       "saturday": {
-        "rdf":"DaysOfWeek",
-        "prefix":"trm"
+        "type": "required"
       },
       "sunday": {
-        "rdf":"DaysOfWeek",
-        "prefix":"trm"
+        "type": "required"
       },
       "start_date": {
-        "rdf":"FromDate",
-        "prefix":"trm"
+        "type": "required"
       },
       "end_date": {
-        "rdf":"ToDate",
-        "prefix":"trm"
+        "type": "required"
       }
-    },
-    "joins":{
-      
     }
   },
   "calendar_dates": {
-    "link":"",
-    "type":"ServiceCalendarFrame",
-    "id":"service_id",
+    "type": "required",
     "fields": {
+      "service_id": {
+        "type": "required"
+      },
       "date": {
-        "rdf":"ToDate",
-        "prefix":"trm"
+        "type": "required"
       },
       "exception_type": {
-        "rdf":"IsAvailble",
-        "prefix":"trm"
+        "type": "required"
       }
-    },
-    "joins":{
-      
     }
   },
   "fare_rules": {
-    "link":"",
-    "type":"FareProduct",
-    "id":"fare_id",
+    "type": "optional",
     "fields": {
+      "fare_id": {
+        "type": "required"
+      },
       "route_id":{
-        "rdf":"GroupOfLinesRef",
-        "prefix":"trm"
+        "type":"optional"
       },
       "origin_id":{
-        "rdf":"StartTariffZoneRef",
-        "prefix":"trm"
+        "type":"optional"
       }, 
       "destination_id":{
-        "rdf":"EndTariffZoneRef",
-        "prefix":"trm"
+        "type":"optional"
       },
       "contains_id":{
-        "rdf":"TariffZoneRef",
-        "prefix":"trm"
+        "type":"optional"
       }
-    },
-    "joins":{
-      
     }
   },
   "shapes":{
-    "link":"shapes",
-    "type":"",
-    "id":"shape_id",
+    "type":"optional",
     "fields":{
+      "shape_id":{
+        "type":"required"
+      },
       "shape_pl_lat":{
-        "geo":"lat",
-        "prefix":"trm"
+        "type":"required"
       },
       "shape_pt_lon":{
-        "geo":"lon",
-        "prefix":"trm"
+        "type":"required"
       },
       "shape_pt_sequence":{
-        "rdf":"sequence",
-        "prefix":"trm"
+        "type":"required"
       },
       "shape_dist_traveled":{
-        "rdf":"distance",
-        "prefix":"trm"
+        "type":"optional"
       }
-    },
-    "joins":{
-      
     }
   },
   "frequencies":{
-    "link":"frequency",
-    "type":"Frequency",
-    "id":"start_time",
+    "type":"optional",
     "fields":{
+      "trip_id":{
+        "type":"required"
+      },
       "start_time":{
-        "rdf":"FirstDepartureTime",
-        "prefix":"trm"
+        "type":"required"
       },
       "end_time":{
-        "rdf":"LastDepartureTime",
-        "prefix":"trm"
+        "type":"required"
       },
       "headway_secs":{
-        "rdf":"ScheduledHeadwayInterval",
-        "prefix":"trm"
+        "type":"required"
       },
       "exac_times":{
-        "rdf":"exactTimes",
-        "prefix":"trm"
-      }
-    },
-    "joins":{
-      "p":{
-        "trip":{
-          "prefix":"trm",
-          "o":{
-            "mapping":{
-              "trips":{
-                "function":"equal",
-                "parameters":{
-                  "str1":{
-                    "value":"trip_id"
-                  },
-                  "str2":{
-                    "value":"trip_id"
-                  }
-                }
-              }
-            }
-          }
-        }
+        "type":"optional"
       }
     }
+
   },
-  "transfer":{
-    "link":"",
-    "type":"",
-    "id":"",
+  "transfer":{ 
+    "type":"optional",
     "fields":{
       "from_stop_id":{
-        "rdf":"",
-        "prefix":"trm"
+        "type":"required"
       },
       "to_stop_id":{
-        "rdf":"",
-        "prefix":"trm"
+        "type":"required"
       },
       "trasnfer_type":{
-        "rdf":"",
-        "prefix":"trm"
+        "type":"required"
       },
       "min_trasnfer_time":{
-        "rdf":"",
-        "prefix":"trm"
+        "type":"optional"
       }
-    },
-    "joins":{
-      
     }    
   }, 
   "pathways": {
-    "link":"",
-    "type":"",
-    "id":"",
+    "type": "optional",
     "fields": {
       "pathway_id": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "required"
       },
       "from_stop_id": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "required"
       },
       "to_stop_id": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "required"
       },
       "pathway_mode": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "required"
       },
       "is_bidirectional": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "required"
       },
       "length": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "traversal_time": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "stair_count": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "max_slope": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "min_width": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "signposted_as": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       },
       "reversed_signposted_as": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       }
-    },
-    "joins":{
-      
     }
   },
   "levels": {
-    "link":"",
-    "type":"",
-    "id":"",
+    "type": "optional",
     "fields": {
       "level_id": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "required"
       },
       "level_index": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "required"
       },
       "level_name": {
-        "rdf":"",
-        "prefix":"trm"
+        "type": "optional"
       }
-    },
-    "joins":{
-      
     }
   },
   "feed_info": { 
-    "link":"feed",
-    "type":"",
-    "id":"feed_publisher_name",
+    "type": "optional",
     "fields": {
       "feed_publisher_name": {
-        "rdf":"publisher",
-        "prefix":"dct"
+        "type": "required"
       },
       "feed_publisher_url": {
-        "rdf":"page",
-        "prefix":"foaf"
+        "type": "required"
       },
       "feed_lang": {
-        "rdf":"language",
-        "prefix":"dct"
+        "type": "required"
       },
       "feed_start_date": {
-        "rdf":"startDate",
-        "prefix":"schema"
+        "type": "optional"
       },
       "feed_version": {
-        "rdf":"version",
-        "prefix":"schema"
+        "type": "optional"
       },
       "feed_contact_email": {
-        "rdf":"ContactPoint",
-        "prefix":"schema"
+        "type": "optional"
       },
       "feed_contact_url": {
-        "rdf":"ContactPoint",
-        "prefix":"schema"
+        "type": "optional"
       }
-    },
-    "joins":{
-      
     }
   }
-}
 }

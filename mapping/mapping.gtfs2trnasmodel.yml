@@ -17,8 +17,8 @@ mappings:
       - [trm:agencyUrl, $(agency_url)]
       - [trm:authorityTimezone ,$(agency_timezone)]
       - [trm:authorityLang,$(agency_lang)]
-#      - [trm:fareUrl, $(agency_fare_url)]
-#      - [trm:email , $(agency_email)]
+      - [trm:fareUrl, $(agency_fare_url)]
+      - [trm:email , $(agency_email)]
 
 #calendar
   calendar:
@@ -89,15 +89,15 @@ mappings:
 
 
 #shapes
-#  shapes:
-#    sources:
-#      - ['gtfs/shapes.csv~csv']
-#    s: https://w3id.org/transmodel/resource/shapes/$(shape_id)
-#    po:
-#    - [geo:lat ,$(shape_pt_lat)]
-#    - [geo:long ,$(shape_pt_lon)]
-#    - [trm:sequence ,$(shape_pt_sequence)]
-#    - [trm:distance ,$(shape_dist_traveled)]
+  shapes:
+    sources:
+      - ['gtfs/shapes.csv~csv']
+    s: https://w3id.org/transmodel/resource/shapes/$(shape_id)
+    po:
+    - [geo:lat ,$(shape_pt_lat)]
+    - [geo:long ,$(shape_pt_lon)]
+    - [trm:sequence ,$(shape_pt_sequence)]
+    - [trm:distance ,$(shape_dist_traveled)]
 
 #stops
   stops:
@@ -148,14 +148,14 @@ mappings:
               parameters:
                 - [str1, $(route_id)]
                 - [str2, $(route_id)]
-#      - p: trm:shape
-#        o:
-#          - mapping: shapes
-#            condition:
-#              function: equal
-#              parameters:
-#                - [str1, $(shape_id)]
-#                - [str2, $(shape_id)]
+      - p: trm:shape
+        o:
+          - mapping: shapes
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(shape_id)]
+                - [str2, $(shape_id)]
 
 #routes
 
@@ -168,18 +168,18 @@ mappings:
       - [trm:shortName, $(route_short_name)]
       - [trm:name, $(route_long_name)]
       - [trm:description, $(route_desc)]
-#      - [trm:, $(route_type)]--> digitos de 0-7 que representa el tipo de transporte  
+      - [trm:, $(route_type)]--> digitos de 0-7 que representa el tipo de transporte  
       - [trm:Url, $(route_url)]
       - [trm:Colour, $(route_color)]
       - [trm:TextColour, $(route_text_color)]
-#      - p: trm:agency
-#        o:
-#          - mapping: agency
-#            condition:
-#              function: equal
-#              parameters:
-#                - [str1, $(agency_id)]
-#                - [str2, $(agency_id)]
+      - p: trm:agency
+        o:
+          - mapping: agency
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(agency_id)]
+                - [str2, $(agency_id)]
 
 #frequencies
   frequencies:

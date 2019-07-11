@@ -49,8 +49,11 @@ function fieldChecker(path){
 		let requiredFields = getRequiredFields(finalFiles[i]);
 		let filledFields = readFirstLine(path + finalFiles[i] + '.csv', requiredFields)
 		error = filledFields.error && requiredFiles.includes(finalFiles[i]);
-		if(filledFields.optionals.length > 0)
+		if(filledFields.optionals.length > 0){
 			finalJson[finalFiles[i]] = filledFields.optionals
+			console.log(finalFiles[i] + " : " + filledFields.optionals.toString());
+
+		}
 		i++
 	}
 	if(error)
@@ -95,12 +98,12 @@ function readFirstLine(file, requiredFields){
 				filledFields.optionals.push(fields[i]);
 			i++;
 		}
-		i = 0;
+		let j = 0;
 		//Comprobamos que estan todos los campos obligatorios
-		while(i < requiredFields.length && filledFields.optionals.includes(requiredFields[i])){
-			i++;
+		while(j < requiredFields.length && filledFields.optionals.includes(requiredFields[j])){
+			j++;
 		}
-		if(i == requiredFields.length)
+		if(j == requiredFields.length)
 			filledFields.error = false;
 		
 	}

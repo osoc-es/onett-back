@@ -27,8 +27,8 @@ function requiredFilesChecker(){
 	while(i < requiredFiles.length && dirFiles.includes(requiredFiles[i])){
 		i++;
 	}
-	console.log(requiredFiles);
-	console.log(dirFiles)
+	//console.log(requiredFiles);
+	//console.log(dirFiles)
 	return i == requiredFiles.length;
 }
 function optionalFileChecker(){
@@ -79,11 +79,11 @@ function readFirstLine(file, requiredFields){
 	let i = 0;
 
 	fields = line.toString('ascii')
-	console.log(fields);
+	//console.log(fields);
 	fields = fields.replace("\r", ""); 
 	fields = fields.replace("\n", "");
 	fields = fields.split(',');
-	console.log(fields)
+	//console.log(fields)
 	if(values = liner.next()){
 		values = values.toString('ascii').substring(0, values.length - 1)
 		values = values.replace("\n", "");
@@ -138,7 +138,7 @@ function mappingGenerator(jsonFile, outputFileName, path, extension){
 		//USAMOS EL JSON gtfsToRdf PARA SELECCIONAR QUE REGLAS DEL MAPPING VA A USAR EL ENGINE DE YARML TO RDF
 		jsonFile[file].forEach((field) => {
 			if(fieldsElements.includes(field)){
-				console.log("field: " + field);
+				//console.log("field: " + field);
 				let prefix = gtfsToRdf["data"][file]["fields"][field]["prefix"];
 				let rdfValue = `${gtfsToRdf["data"][file]["fields"][field]["rdf"]}`;
 				if(rdfValue != "")
@@ -174,7 +174,7 @@ function mappingGenerator(jsonFile, outputFileName, path, extension){
 		if(Yaml[i] != '\"')
 			sanitizedYaml += Yaml[i];
 	}
-	console.log(sanitizedYaml);
+	//console.log(sanitizedYaml);
 	fs.writeFile(outputFile, sanitizedYaml, (err) =>{
 		if(err)
 			console.log(err);
@@ -186,11 +186,17 @@ async function dynamicRdfMapGenerator(path, outputFileName){
 	await dirFileCounter(path);
 	if(requiredFilesChecker()){
 		await	optionalFileChecker();
+		console.log("Optional Files ok");
 		await	sanitizeVerifiedFiles();
+		console.log("SanitizeVerfiedFiles ok");
 		let finalJson = fieldChecker(path);
-		finalYarrrml = await mappingGenerator(finalJson, outputFileName, path, 'csv');
+		if(finalJson != null){
+			console.log("FinalJson Generated Correctly");
+			finalYarrrml = await mappingGenerator(finalJson, outputFileName, path, 'csv');
+			console.log("Final yarrrml generated Correctly");
+		}
 	}else{
-	console.log("Algo salio mal...");
+	console.log("Required Files wrong");
 	}
 	return finalYarrrml;
 }

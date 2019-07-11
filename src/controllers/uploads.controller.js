@@ -1,5 +1,6 @@
 	const unzipper = require('unzipper')
 	const fs = require('fs');
+	const gtfsToRdf = require('../middlewares/gtfsFilesVerifier');
         function unzip(inputPath, outputPath){
                 fs.createReadStream(inputPath)
                 .pipe(unzipper.Extract({path:outputPath}));
@@ -21,12 +22,9 @@
 
         async function gtfsVerifier(zipname){
                 let filename = zipname.substring(0, zipname.length-4);
-                //let unzipper = exec(`sh ./bashScripts/gtfsunzip.sh ${filename}`);
                 makeDir(filename);
                 unzip(`./uploads/${zipname}`, `./uploads/${filename}/`);
-
-
-
+		gtfsToRdf(`./uploads/${filename}`, filename);
         }
         exports.test = function test(req, res){
                 res.send("Ok");

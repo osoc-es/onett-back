@@ -27,7 +27,9 @@ function requiredFilesChecker(){
 	while(i < requiredFiles.length && dirFiles.includes(requiredFiles[i])){
 		i++;
 	}
-	return i == 0;
+	console.log(requiredFiles);
+	console.log(dirFiles)
+	return i == requiredFiles.length;
 }
 function optionalFileChecker(){
 	optionalFiles.forEach(file => {
@@ -45,7 +47,7 @@ function fieldChecker(path){
 	let error = false
 	while( i < finalFiles.length && !error){
 		let requiredFields = getRequiredFields(finalFiles[i]);
-		let filledFields = readFirstLine(path + finalFiles[i] + '.txt', requiredFields)
+		let filledFields = readFirstLine(path + finalFiles[i] + '.csv', requiredFields)
 		error = filledFields.error && requiredFiles.includes(finalFiles[i]);
 		if(filledFields.optionals.length > 0)
 			finalJson[finalFiles[i]] = filledFields.optionals
@@ -76,10 +78,16 @@ function readFirstLine(file, requiredFields){
 	}
 	let i = 0;
 
-	fields = line.toString('ascii').substring(3,line.length -1)
+	fields = line.toString('ascii')
+	console.log(fields);
+	fields = fields.replace("\r", ""); 
+	fields = fields.replace("\n", "");
 	fields = fields.split(',');
+	console.log(fields)
 	if(values = liner.next()){
 		values = values.toString('ascii').substring(0, values.length - 1)
+		values = values.replace("\n", "");
+		values = values.replace("\r", "");
 		values  = values.split(',');
 		//Borramos los campos vacios
 		while(i < fields.length){
@@ -172,21 +180,22 @@ function mappingGenerator(jsonFile, outputFileName, path, extension){
 			console.log(err);
 	})
 }
-function dynamicRdfMapGenerator(path, outputFileName){
+async function dynamicRdfMapGenerator(path, outputFileName){
 	let finalYarrrml = null;
-	jsonFileCounter();
-	dirFileCounter(path);
+	await jsonFileCounter();
+	await dirFileCounter(path);
 	if(requiredFilesChecker()){
-		optionalFileChecker();
-		sanitizeVerifiedFiles();
+		await	optionalFileChecker();
+		await	sanitizeVerifiedFiles();
 		let finalJson = fieldChecker(path);
-		finalYarrrml = mappingGenerator(finalJson, outputFileName, path, 'txt');
+		finalYarrrml = await mappingGenerator(finalJson, outputFileName, path, 'csv');
+	}else{
+	console.log("Algo salio mal...");
 	}
 	return finalYarrrml;
 }
-module.exports = {
-	dynamicRdfMapGenerator
-}
+dynamicRdfMapGenerator('/home/w0xter/Desktop/gtfs/gtfs2/', 'works'), 
+module.exports = dynamicRdfMapGenerator;
 /*
 jsonFileCounter();
 dirFileCounter('uploads/CTRM_Madird_Spain_862019153/');

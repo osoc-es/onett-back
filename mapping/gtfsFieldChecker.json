@@ -281,7 +281,7 @@
       "shape_id":{
         "type":"required"
       },
-      "shape_pl_lat":{
+      "shape_pt_lat":{
         "type":"required"
       },
       "shape_pt_lon":{

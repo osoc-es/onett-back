@@ -33,19 +33,20 @@
         }
 
         function gtfsVerifier(zipname, country, transport, city, agency){
+                let yarrrmlFile = null;
                 let filename = zipname.substring(0, zipname.length-4);
-                makeDir(filename).then((data) => {
+
+                return makeDir(filename).then((data) => {
                         filename = data.toString();
                         console.log(data);
                         return unzip(`./uploads/${zipname}`, `./uploads/${filename}/`)
                 }).then((data) => {
                         console.log(data);
                         console.log(filename)
-			return gtfsToRdf(`./uploads/${filename}/`, filename, country, city, transport);
-		}).catch((error) => {
+                        return gtfsToRdf(`./uploads/${filename}/`, filename, country, city, transport);
+                }).catch((error) => {
                         console.log(error)
                 });
-		return true;
         }
         exports.test = function test(req, res){
                 res.send("Ok");
@@ -59,8 +60,11 @@
                 let agency = req.body.agency.toString();
                 let date = Date.now();
                 let filename = req.body.filename.toString();
-		let yarrrml = await gtfsVerifier(filename, country, transport, city, agency);
-                res.status(200).send('ok');
-
+                gtfsVerifier(filename, country, transport, city, agency).then((data) =>{
+                        return res.status(500).send(data);
+                }).catch((error) =>{
+                        console.log(error);
+                        return res.status(500).send('Hay que revisar que ha salido mal.');
+                }); 
         }
 

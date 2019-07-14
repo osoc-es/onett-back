@@ -222,108 +222,110 @@ function readFirstLine(path, filename, requiredFields, extension){
 }
 function mappingGenerator(jsonFile, outputFileName, path, extension, country, city, transport){
 	try{
-		let filenames = Object.keys(jsonFile);
-		let jsonToYaml= {};
-		let subjectHead = gtfsToRdf["subjectHead"];
-		let outputFile = outputFileName + '.yaml';
-		let prefixArray = Object.keys(gtfsToRdf["prefixs"]);//PENSAR COMO HACER DISPLAY DE VARIOS PREFIJOS.
-		let prefixsStr = '';
-		jsonToYaml["prefixes"] = {};
-		prefixArray.forEach(prefix => {
-			jsonToYaml["prefixes"][prefix] = gtfsToRdf["prefixs"][prefix];
-		})
-		jsonToYaml["mappings"] = {}
-	//GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
-		filenames.forEach((file) => {
-			jsonToYaml["mappings"][file] = {};
-			let source = `[${file}.${extension}~${extension}]`;
-			let type = gtfsToRdf["data"][file]["type"];
-			let typePrefix = gtfsToRdf["data"][file]["typePrefix"];
-			let s  = `${subjectHead}${country}/${city}/${transport}/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})`;
-			let fieldsElements = Object.keys(gtfsToRdf["data"][file]["fields"]);
-			let joinsFields = gtfsToRdf["data"][file]["joins"]["fields"];
-			let pType = `[a, ${typePrefix}:${type}]`; 
-			let joinsElements = '';
+		let promise  = new Promise(async (resolve, reject) => {
+			let filenames = Object.keys(jsonFile);
+			let jsonToYaml= {};
+			let subjectHead = gtfsToRdf["subjectHead"];
+			let outputFile = outputFileName + '.yaml';
+			let prefixArray = Object.keys(gtfsToRdf["prefixs"]);//PENSAR COMO HACER DISPLAY DE VARIOS PREFIJOS.
+			jsonToYaml["prefixes"] = {};
+			prefixArray.forEach(prefix => {
+				jsonToYaml["prefixes"][prefix] = gtfsToRdf["prefixs"][prefix];
+			})
+			jsonToYaml["mappings"] = {}
+		//GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
+			await filenames.forEach(async (file) => {
+				jsonToYaml["mappings"][file] = {};
+				let source = `[${file}.${extension}~${extension}]`;
+				let type = gtfsToRdf["data"][file]["type"];
+				let typePrefix = gtfsToRdf["data"][file]["typePrefix"];
+				let s  = `${subjectHead}${country}/${city}/${transport}/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})`;
+				let fieldsElements = Object.keys(gtfsToRdf["data"][file]["fields"]);
+				let joinsFields = gtfsToRdf["data"][file]["joins"]["fields"];
+				let pType = `[a, ${typePrefix}:${type}]`; 
 	
-			jsonToYaml["mappings"][file]["sources"] = [source];
-			jsonToYaml["mappings"][file]["s"] = s;
-			jsonToYaml["mappings"][file]["po"] = [];
-			if(type != "")
-				jsonToYaml["mappings"][file]["po"].push(pType);
-			//USAMOS EL JSON gtfsToRdf PARA SELECCIONAR QUE REGLAS DEL MAPPING VA A USAR EL ENGINE DE YARML TO RDF
-			jsonFile[file].forEach((field) => {
-				if(fieldsElements.includes(field)){
-					//console.log("field: " + field);
-					let prefix = gtfsToRdf["data"][file]["fields"][field]["prefix"];
-					let rdfValue = `${gtfsToRdf["data"][file]["fields"][field]["rdf"]}`;
-					if(rdfValue != "")
-						jsonToYaml["mappings"][file]["po"].push(`[${prefix}:${rdfValue}, $(${field})]`);
-				}
-			});
-			jsonFile[file].forEach((field) => {
-				if(joinsFields != undefined && joinsFields.includes(field)){
-					let pObject = {};
-					let pName = Object.keys(gtfsToRdf["data"][file]["joins"]["p"])[joinsFields.indexOf(field)];
-					let pPrefix = gtfsToRdf["data"][file]["joins"]["p"][pName]["prefix"];
-					let mappings = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"];
-					pObject["p"] = pPrefix +":" +pName;
-					pObject["o"] = [];
-					for (mapping in mappings){
-						let mapObject = {};
-						mapObject["mapping"] = mapping;
-						mapObject["condition"] = {};
-						mapObject["condition"]["function"] = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["function"];
-						mapObject["condition"]["parameters"] = [];
-						for (parameter in gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"]){
-							mapObject["condition"]["parameters"].push(`[${parameter}, $(${gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"][parameter]["value"]})]`);
-						}
-						pObject["o"].push(mapObject);
+				jsonToYaml["mappings"][file]["sources"] = [source];
+				jsonToYaml["mappings"][file]["s"] = s;
+				jsonToYaml["mappings"][file]["po"] = [];
+				if(type != "")
+					jsonToYaml["mappings"][file]["po"].push(pType);
+				//USAMOS EL JSON gtfsToRdf PARA SELECCIONAR QUE REGLAS DEL MAPPING VA A USAR EL ENGINE DE YARML TO RDF
+				 await jsonFile[file].forEach((field) => {
+					if(fieldsElements.includes(field)){
+						//console.log("field: " + field);
+						let prefix =  gtfsToRdf["data"][file]["fields"][field]["prefix"];
+						let rdfValue =  `${gtfsToRdf["data"][file]["fields"][field]["rdf"]}`;
+						if(rdfValue != "")
+							  jsonToYaml["mappings"][file]["po"].push(`[${prefix}:${rdfValue}, $(${field})]`);
 					}
-					jsonToYaml["mappings"][file]["po"].push(pObject);
+				});
+				await jsonFile[file].forEach(async (field) => {
+					if(joinsFields != undefined && joinsFields.includes(field)){
+						let pObject =  {};
+						let pName =  Object.keys(gtfsToRdf["data"][file]["joins"]["p"])[joinsFields.indexOf(field)];
+						let pPrefix = gtfsToRdf["data"][file]["joins"]["p"][pName]["prefix"];
+						let mappings = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"];
+						pObject["p"] = pPrefix +":" +pName;
+						pObject["o"] =   [];
+						for (mapping in mappings){
+							let mapObject = {};
+							mapObject["mapping"] = mapping;
+							mapObject["condition"] = {};
+							mapObject["condition"]["function"] = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["function"];
+							mapObject["condition"]["parameters"] = [];
+							for (parameter in gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"]){
+								mapObject["condition"]["parameters"].push(`[${parameter}, $(${gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"][parameter]["value"]})]`);
+							}
+							pObject["o"].push(mapObject);
+						}
+						jsonToYaml["mappings"][file]["po"].push(pObject);
+					}
+				});
+			let Yaml = YAML.stringify(jsonToYaml);
+			let sanitizedYaml ="";
+			for (chr in Yaml){
+				if(Yaml[chr] != "\"" && Yaml[chr] != "\'")
+					sanitizedYaml +=   Yaml[chr];
+			}
+			fs.writeFile(path + outputFile, sanitizedYaml, (err) =>{
+				if(err){
+					console.log(err);
+					reject(err);
 				}
 			});
+			resolve(sanitizedYaml)
 		});
-		let Yaml = YAML.stringify(jsonToYaml);
-		let sanitizedYaml ="";
-		for (chr in Yaml){
-			if(Yaml[chr] != "\"" && Yaml[chr] != "\'")
-				sanitizedYaml += Yaml[chr];
-		}
-		fs.writeFile(path + outputFile, sanitizedYaml, (err) =>{
-			if(err)
-				console.log(err);
-		})
+		});
+		return promise;
 	}catch(error){
 		console.log(error);
 	}
 }
-function dynamicRdfMapGenerator(path, outputFileName, country, city, transport){
+async function dynamicRdfMapGenerator(path, outputFileName, country, city, transport){
 	try{
-		let finalYarrrml = null;
-		
-	jsonFileCounter().then((data) => {
-		console.log(data);
-		return dirFileCounter(path);
-	}).then((data) => {
-		console.log(data);
-		return  requiredFilesChecker();
-	}).then((data) => {
-		console.log(data);
-		return optionalFileChecker();
-	}).then((data) => {
-		console.log(data);
-		return sanitizeVerifiedFiles();
-	}).then((data) => {
-		console.log(data);
-		return fieldChecker(path, filesExtensions[0]);
-	}).then((data) => {
-		console.log("Saves in " + outputFileName)
-		finalYarrrml = mappingGenerator(data, outputFileName, path, filesExtensions[0], country, city, transport);
-	}).catch((error) => {
-		console.log("Fallo la promesa: " + error);
-		return error;
-	});
-	return finalYarrrml;
+		return jsonFileCounter().then((data) => {
+			console.log(data);
+			return dirFileCounter(path);
+		}).then((data) => {
+			console.log(data);
+			return  requiredFilesChecker();
+		}).then((data) => {
+			console.log(data);
+			return optionalFileChecker();
+		}).then((data) => {
+			console.log(data);
+			return sanitizeVerifiedFiles();
+		}).then((data) => {
+			console.log(data);
+			return fieldChecker(path, filesExtensions[0]);
+		}).then((data) => {
+			console.log("Saves in " + outputFileName)
+			return  mappingGenerator(data, outputFileName, path, filesExtensions[0], country, city, transport);
+		}).catch((error) => {
+			console.log("Fallo la promesa: " + error);
+			reject(error)
+		});
+
 }catch (error){
 	console.log("Fallo la promesa: " + error);
 }

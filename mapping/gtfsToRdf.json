@@ -50,7 +50,7 @@
         "rdf":"",
         "prefix":"trm"
       }
-    }, 
+    },
     "joins":{
       "fields":["service_id", "route_id", "shape_id"],
       "p":{
@@ -78,7 +78,7 @@
                   "str2":{
                     "value":"service_id"
                   }
-                }               
+                }
               }
             }
           }
@@ -154,7 +154,7 @@
       }
     },
     "joins":{
-      
+
     }
   },
   "agency": {
@@ -193,7 +193,7 @@
       }
     },
     "joins":{
-      
+
     }
   },
   "stops": {
@@ -319,7 +319,7 @@
                     "value":"trip_id"
                   }
                 }
-              }              
+              }
             }
           }
         },
@@ -340,8 +340,8 @@
               }
             }
           }
-        }        
-      }    
+        }
+      }
     }
   },
   "routes": {
@@ -451,7 +451,7 @@
       }
     },
     "joins":{
-      
+
     }
   },
   "calendar_dates": {
@@ -470,7 +470,7 @@
       }
     },
     "joins":{
-      
+
     }
   },
   "fare_rules": {
@@ -486,7 +486,7 @@
       "origin_id":{
         "rdf":"StartTariffZoneRef",
         "prefix":"trm"
-      }, 
+      },
       "destination_id":{
         "rdf":"EndTariffZoneRef",
         "prefix":"trm"
@@ -497,7 +497,7 @@
       }
     },
     "joins":{
-      
+
     }
   },
   "shapes":{
@@ -524,7 +524,7 @@
       }
     },
     "joins":{
-      
+
     }
   },
   "frequencies":{
@@ -574,18 +574,18 @@
       }
     }
   },
-  "transfer":{
+  "transfers":{
     "link":"",
-    "type":"",
+    "type":"Connection",
     "typePrefix":"trm",
-    "id":"",
+    "id":"from_stop_id",
     "fields":{
       "from_stop_id":{
-        "rdf":"",
+        "rdf":"FromPointRef",
         "prefix":"trm"
       },
       "to_stop_id":{
-        "rdf":"",
+        "rdf":"ToPointRef",
         "prefix":"trm"
       },
       "trasnfer_type":{
@@ -593,14 +593,14 @@
         "prefix":"trm"
       },
       "min_trasnfer_time":{
-        "rdf":"",
+        "rdf":"LineRef",
         "prefix":"trm"
       }
     },
     "joins":{
-      
-    }    
-  }, 
+
+    }
+  },
   "pathways": {
     "link":"",
     "type":"",
@@ -657,7 +657,7 @@
       }
     },
     "joins":{
-      
+
     }
   },
   "levels": {
@@ -680,10 +680,10 @@
       }
     },
     "joins":{
-      
+
     }
   },
-  "feed_info": { 
+  "feed_info": {
     "link":"feed",
     "type":"",
     "typePrefix":"trm",
@@ -719,7 +719,7 @@
       }
     },
     "joins":{
-      
+
     }
   }
 }

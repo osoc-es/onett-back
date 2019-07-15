@@ -243,7 +243,7 @@ mappings:
           - [a, trm:Connection] #revise ID here there are two of them in transfers
           - [trm:FromPointRef, $(from_stop_id)]
           - [trm:ToPointRef, $(to_stop_id)]
-           # - [trm:, $(transfer_type)]--> digits form 0-3 represents type of transfer
+           # - [trm:, $(transfer_type)]--> digits from 0-3 represents type of transfer
           - [trm:LineRef, $(min_transfer_time)]
 
            p: trm:FromPointRef
@@ -263,4 +263,70 @@ mappings:
                    - [str1, $(stop_id)]
                    - [str2, $(stop_id)]
 
-#pathways
+#pathways. REVISED
+# trm translation is based on self sense of what could be the real translation.
+    pathways:
+        sources:
+        - ['../gtfs/pathways.csv~csv']
+       s: https://w3id.org/transmodel/resource/pathways/$(pathways_id)
+       po:
+          -[a, trm:]
+          -[trm:FromPointRef, $(from_stop_id)] #ID referenced to stops_id
+          -[trm:ToPointRef, $(to_stop_id)]  #ID referenced to stops.stops_id
+          # -[trm:, $(pathway_mode)] --> digits from 1-7 represents mode of pathways
+          # -[trm:, $(is_bidirectional)] --> digits from 0-1 represents the direction of pathway
+          -[trm:Lenght, $(length)]
+          -[trm:TransversalTime, $(transversal_time)]
+          -[trm:Stairs, $(stair_count)]
+          -[trm:Slope, $(max_slope)]
+          -[trm:Width, $(min_width)]
+          -[trm:Signposted, $(signposted_as)]
+          -[trm:SignpostedRev, $(reversed_signposted_as)]
+
+
+         p: trm:FromPointRef
+          o:
+            - mapping: stops
+              condition:
+                function: equal
+                parameters:
+                  - [str1, $(stop_id)]
+                  - [str2, $(stop_id)]
+        p: trm:ToPointRef
+         o:
+           - mapping: stops
+             condition:
+               function: equal
+               parameters:
+                 - [str1, $(stop_id)]
+                 - [str2, $(stop_id)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          #

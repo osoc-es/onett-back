@@ -597,10 +597,49 @@
         "prefix":"trm"
       }
     },
-    "joins":{
+	"joins":{
+		"fields":["from_stop_id", "to_stop_id"],
+		"p":{
+			"FromPointRef":{
+				"prefix":"trm",
+				"o":{
+					"mapping":{
+						"stops":{
+							"function":"equal",
+							"parameters":{
+								"str1":{
+									"value":"stop_id"
+								},
+								"str2":{
+									"value":"stop_id"
+								}
+							}
+						}
+					}
+				}
+			},
+			"ToPointRef":{
+				"prefix":"trm",
+				"o":{
+					"mapping":{
+						"stops":{
+							"function":"equal",
+							"parameters":{
+								"str1":{
+									"value":"stop_id",
+									"str2":{
+										"value":"stop_id"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+},
 
-    }
-  },
   "pathways": {
     "link":"pathways",
     "type":"",
@@ -657,7 +696,46 @@
       }
     },
     "joins":{
-
+		"fields":["from_stop_id", "to_stop_id"],
+		"p":{
+			"FromPointRef":{
+				"prefix":"trm",
+				"o":{
+					"mapping":{
+						"stops":{
+							"function":"equal",
+							"parameters":{
+								"str1":{
+									"value":"stop_id"
+								},
+								"str2":{
+									"value":"stop_id"
+								}
+							}
+						}
+					}
+				}
+			},
+			"ToPointRef":{
+				"prefix":"trm",
+				"o":{
+					"mapping":{
+						"stops":{
+							"function":"equal",
+							"parameters":{
+								"str1":{
+									"value":"stop_id",
+									"str2":{
+										"value":"stop_id"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
     }
   },
   "levels": {

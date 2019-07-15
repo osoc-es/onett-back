@@ -11,7 +11,7 @@ const dirFiles = [];
 const dirOptionalFiles = [];
 const filesExtensions = [];
 let finalFiles = [];
-
+let warning = "";
 
 function jsonFileCounter(){
 	try{
@@ -28,13 +28,14 @@ function jsonFileCounter(){
 				resolve ("GtfsFieldChecker loaded");
 			}else{
 				console.log("Falla jsonFileCounter");
-				reject ("error");
+				reject ("Falla jsonFileCounter");
 			}
 		});
 		return promise;
 	}catch(error){
 		console.log(error);
 		console.log("Falla jsonFileCounter");
+		return error;
 
 	}
 		
@@ -53,7 +54,7 @@ function dirFileCounter(path){
 				resolve (filesExtensions[0]);
 			}else{
 				console.log("Falla dirFileCounter");
-				reject ("error");
+				reject ("Falla dirFileCounter");
 				
 			}
 		});
@@ -61,6 +62,8 @@ function dirFileCounter(path){
 	}catch(error){
 		console.log("Falla jsonFileCounter");
 		console.log(error);
+		return error;
+
 	}
 		
 }
@@ -76,14 +79,16 @@ function requiredFilesChecker(){
 			if(i == requiredFiles.length)
 				resolve ("All the required Files are include");
 			else{
-				console.log("Falla requiredFilesChecker");
-				reject ("error");
+				console.log("Falla requiredFilesChecker falta " + requiredFiles[i]);
+				reject ("Falla requiredFilesChecker falta " + requiredFiles[i]);
 		}
 	});
 		return promise;
 	}catch(error){
 		console.log("Falla requiredFilesChecker");
 		console.log(error);
+		return error;
+
 	}
 }
 function optionalFileChecker(){
@@ -97,7 +102,7 @@ function optionalFileChecker(){
 				resolve ("The optionals files are checked");
 			else{
 				console.log("Falla optionalFileChecker");
-				reject("error");
+				reject("Falla optionalFileChecker");
 			}
 		});
 		return promise;
@@ -114,13 +119,16 @@ function sanitizeVerifiedFiles(){
 			finalFiles = requiredFiles.concat(dirOptionalFiles);
 			resolve ("Dir files Sanitized");
 		}else{
-			console.log("Falla sanitizeVerifiedFiles")
-			reject ("error");
+			console.log("Falla sanitizeVerifiedFiles");
+			reject ("Falla sanitizeVerifiedFiles");
 		}
 	});
 	return promise;
 	}catch(error){
-		console.log(error)
+		console.log("Falla sanitizeVerifiedFiles");
+		console.log(error);
+		return error;
+
 	}
 }
 function fieldChecker(path, extension){
@@ -134,7 +142,12 @@ function fieldChecker(path, extension){
 				getRequiredFields(finalFiles[i]).then((data) => {
 					return readFirstLine(path, file, data, extension);
 				}).then((data) => {
-					finalJson[file] = data;		
+					if(data.length > 0)
+						finalJson[file] = data;
+					else if(optionalFiles.includes(file)  && data.length == 0){
+						finalFiles.splice(indexOf(file),1);
+						warning += "El formato de " + file + " no era correcto por lo que se ha usado para generar el RDF.\n";
+					}
 				})
 				.catch((err) => {
 					console.log(err);
@@ -145,10 +158,10 @@ function fieldChecker(path, extension){
 			}
 		if(error){
 			console.log("Falla fieldChecker");
-			reject ("error");
+			reject ("Falla fieldChecker");
 		}
 		else{
-			console.log("Todo correcto: FieldChecker.")
+			console.log(warning)
 			resolve (finalJson);
 		}
 		});
@@ -156,6 +169,7 @@ function fieldChecker(path, extension){
 	}catch(err){
 		console.log("Catch: Falla fieldChecker");
 		console.log(err);
+		return err;
 	}
 }
 function getRequiredFields(file){
@@ -171,7 +185,9 @@ function getRequiredFields(file){
 		});
 		return promise;
 	}catch(error){
+		console.log("Falla get requiredFields");
 		console.log(error);
+		return error;
 	}
 }
 function readFirstLine(path, filename, requiredFields, extension){
@@ -202,8 +218,12 @@ function readFirstLine(path, filename, requiredFields, extension){
 					j++;
 				}
 				if(j != requiredFields.length){
-					console.log("Falla readFirstLine " + j + " " + requiredFields[j])
-					reject("The required Fields are not included")
+					if(optionalFiles.includes(filename)){
+						requiredFields = [];
+						resolve(requiredFields);
+					}else{
+						reject("The required Fields of " + filename + " are not included")
+					}
 				}else{
 					resolve(filledFields);
 				}
@@ -283,14 +303,22 @@ function mappingGenerator(jsonFile, outputFileName, path, extension, country, ci
 				});
 			let Yaml = YAML.stringify(jsonToYaml);
 			let sanitizedYaml ="";
+			let result = {
+				"warning":"",
+				"yarrrml":"",
+				"error":""
+			};
 			for (chr in Yaml){
 				if(Yaml[chr] != "\"" && Yaml[chr] != "\'")
 					sanitizedYaml +=   Yaml[chr];
 			}
+			result.warning = warning;
+			result.yarrrml = sanitizedYaml;
 			fs.writeFile(path + outputFile, sanitizedYaml, (err) =>{
 				if(err){
 					console.log(err);
-					reject(err);
+					result.error = err;
+					reject(result);
 				}
 			});
 			resolve(sanitizedYaml)
@@ -323,7 +351,7 @@ async function dynamicRdfMapGenerator(path, outputFileName, country, city, trans
 			return  mappingGenerator(data, outputFileName, path, filesExtensions[0], country, city, transport);
 		}).catch((error) => {
 			console.log("Fallo la promesa: " + error);
-			reject(error)
+			return error;
 		});
 
 }catch (error){

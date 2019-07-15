@@ -263,7 +263,7 @@ mappings:
                    - [str1, $(stop_id)]
                    - [str2, $(stop_id)]
 
-#pathways. REVISED
+#pathways. REVISE
 # trm translation is based on self sense of what could be the real translation.
     pathways:
         sources:
@@ -303,28 +303,16 @@ mappings:
 
 
 
+# levels. REVISE
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    levels:
+        sources:
+         - ['../gtfs/levels.csv~csv']
+        s: https://w3id.org/transmodel/resource/levels/$(level_id)
+        po:
+           -[a, trm:]
+           -[trm:LevelIndex, $(level_index)]  #ID referenced to stops.stops_id
+           -[trm:LevelName, $(level_name)]
 
 
 

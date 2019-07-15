@@ -661,21 +661,21 @@
     }
   },
   "levels": {
-    "link":"",
+    "link":"levels",
     "type":"",
     "typePrefix":"trm",
-    "id":"",
+    "id":"level_id",
     "fields": {
       "level_id": {
-        "rdf":"",
+        "rdf":"LevelId",
         "prefix":"trm"
       },
       "level_index": {
-        "rdf":"",
+        "rdf":"LevelIndex",
         "prefix":"trm"
       },
       "level_name": {
-        "rdf":"",
+        "rdf":"LevelName",
         "prefix":"trm"
       }
     },

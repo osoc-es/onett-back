@@ -60,11 +60,11 @@
                 let agency = req.body.agency.toString();
                 let date = Date.now();
                 let filename = req.body.filename.toString();
-                gtfsVerifier(filename, country, transport, city, agency).then((data) =>{
-                        return res.status(500).send(data);
+                await gtfsVerifier(filename, country, transport, city, agency).then((data) =>{
+                        return res.status(200).send({"result":data});
                 }).catch((error) =>{
                         console.log(error);
-                        return res.status(500).send('Hay que revisar que ha salido mal.');
+                        return res.status(500).send({"result":error});
                 }); 
         }
 

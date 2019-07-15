@@ -35,8 +35,8 @@ mappings:
       - [trm:DaysOfWeek, $(saturday)]
       - [trm:FromDate, $(start_date)]
       - [trm:ToDate, $(end_date)]
-      
-#calendar_dates 
+
+#calendar_dates
   calendar_dates:
     sources:
       - ['../gtfs/calendar_dates.csv~csv']
@@ -46,7 +46,7 @@ mappings:
       - [trm:ToDate, $(date)]
       - [trm:IsAvailable, $(exception_type)]
 
-#fare_attributes      
+#fare_attributes
   fare_attributes:
     sources:
       - ['../gtfs/fare_attributes.csv~csv']
@@ -76,12 +76,12 @@ mappings:
   feed_info:
     sources:
       - ['../gtfs/feed_info.csv~csv']
-    s: https://w3id.org/transmodel/resource/feed/$(feed_publisher_name) 
+    s: https://w3id.org/transmodel/resource/feed/$(feed_publisher_name)
     po:
       - [dct:publisher,$(feed_publisher_name)]
       - [foaf:page,$(feed_publisher_url)]
       - [dct:language ,$(feed_lang)]
-      - [schema:startDate ,$(feed_start_date)]	
+      - [schema:startDate ,$(feed_start_date)]
       - [schema:endDate ,$(feed_end_date)]
       - [schema:version ,$(feed_version)]
       - [schema:ContactPoint,$(feed_contact_email)]
@@ -123,8 +123,8 @@ mappings:
       - [a, trm:ServiceJourney]
       - [trm:lineRef, $(route_id)]
       - [trm:DayTypeRef, $(service_id)]
-      - [trm:DestinationDisplayView, $(trip_headsign)]  
-      - [trm:DirectionRef, $(direction_id)]  
+      - [trm:DestinationDisplayView, $(trip_headsign)]
+      - [trm:DirectionRef, $(direction_id)]
       - [trm:BlockRef , $(block_id)]
       - p: trm:service
         o:
@@ -168,7 +168,7 @@ mappings:
       - [trm:shortName, $(route_short_name)]
       - [trm:name, $(route_long_name)]
       - [trm:description, $(route_desc)]
-#      - [trm:, $(route_type)]--> digitos de 0-7 que representa el tipo de transporte  
+#      - [trm:, $(route_type)]--> digitos de 0-7 que representa el tipo de transporte
       - [trm:Url, $(route_url)]
       - [trm:Colour, $(route_color)]
       - [trm:TextColour, $(route_text_color)]
@@ -232,3 +232,35 @@ mappings:
               parameters:
                 - [str1, $(stop_id)]
                 - [str2, $(stop_id)]
+
+
+#transfers. REVISE
+    transfers:
+        sources:
+         -['../gtfs/transfers.csv~csv']
+        s: https://w3id.org/transmodel/resource/transfers/$(from_stop_id)
+        po:
+          - [a, trm:Connection] #revise ID here there are two of them in transfers
+          - [trm:FromPointRef, $(from_stop_id)]
+          - [trm:ToPointRef, $(to_stop_id)]
+           # - [trm:, $(transfer_type)]--> digits form 0-3 represents type of transfer
+          - [trm:LineRef, $(min_transfer_time)]
+
+           p: trm:FromPointRef
+            o:
+              - mapping: stops
+                condition:
+                  function: equal
+                  parameters:
+                    - [str1, $(stop_id)]
+                    - [str2, $(stop_id)]
+          p: trm:ToPointRef
+           o:
+             - mapping: stops
+               condition:
+                 function: equal
+                 parameters:
+                   - [str1, $(stop_id)]
+                   - [str2, $(stop_id)]
+
+#pathways

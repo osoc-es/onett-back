@@ -575,7 +575,7 @@
     }
   },
   "transfers":{
-    "link":"",
+    "link":"transfers",
     "type":"Connection",
     "typePrefix":"trm",
     "id":"from_stop_id",
@@ -597,26 +597,65 @@
         "prefix":"trm"
       }
     },
-    "joins":{
+	"joins":{
+		"fields":["from_stop_id", "to_stop_id"],
+		"p":{
+			"FromPointRef":{
+				"prefix":"trm",
+				"o":{
+					"mapping":{
+						"stops":{
+							"function":"equal",
+							"parameters":{
+								"str1":{
+									"value":"stop_id"
+								},
+								"str2":{
+									"value":"stop_id"
+								}
+							}
+						}
+					}
+				}
+			},
+			"ToPointRef":{
+				"prefix":"trm",
+				"o":{
+					"mapping":{
+						"stops":{
+							"function":"equal",
+							"parameters":{
+								"str1":{
+									"value":"stop_id",
+									"str2":{
+										"value":"stop_id"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+},
 
-    }
-  },
   "pathways": {
-    "link":"",
+    "link":"pathways",
     "type":"",
     "typePrefix":"trm",
-    "id":"",
+    "id":"pathways_id",
     "fields": {
       "pathway_id": {
-        "rdf":"",
+        "rdf":"FromPointRef",
         "prefix":"trm"
       },
       "from_stop_id": {
-        "rdf":"",
+        "rdf":"ToPointRef",
         "prefix":"trm"
       },
       "to_stop_id": {
-        "rdf":"",
+        "rdf":"ToPointRef",
         "prefix":"trm"
       },
       "pathway_mode": {
@@ -628,54 +667,93 @@
         "prefix":"trm"
       },
       "length": {
-        "rdf":"",
+        "rdf":"Lenght",
         "prefix":"trm"
       },
       "traversal_time": {
-        "rdf":"",
+        "rdf":"TransversalTime",
         "prefix":"trm"
       },
       "stair_count": {
-        "rdf":"",
+        "rdf":"Stairs",
         "prefix":"trm"
       },
       "max_slope": {
-        "rdf":"",
+        "rdf":"Slope",
         "prefix":"trm"
       },
       "min_width": {
-        "rdf":"",
+        "rdf":"Width",
         "prefix":"trm"
       },
       "signposted_as": {
-        "rdf":"",
+        "rdf":"Signposted",
         "prefix":"trm"
       },
       "reversed_signposted_as": {
-        "rdf":"",
+        "rdf":"SignpostedRev",
         "prefix":"trm"
       }
     },
     "joins":{
-
+		"fields":["from_stop_id", "to_stop_id"],
+		"p":{
+			"FromPointRef":{
+				"prefix":"trm",
+				"o":{
+					"mapping":{
+						"stops":{
+							"function":"equal",
+							"parameters":{
+								"str1":{
+									"value":"stop_id"
+								},
+								"str2":{
+									"value":"stop_id"
+								}
+							}
+						}
+					}
+				}
+			},
+			"ToPointRef":{
+				"prefix":"trm",
+				"o":{
+					"mapping":{
+						"stops":{
+							"function":"equal",
+							"parameters":{
+								"str1":{
+									"value":"stop_id",
+									"str2":{
+										"value":"stop_id"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
     }
   },
   "levels": {
-    "link":"",
+    "link":"levels",
     "type":"",
     "typePrefix":"trm",
-    "id":"",
+    "id":"level_id",
     "fields": {
       "level_id": {
-        "rdf":"",
+        "rdf":"LevelId",
         "prefix":"trm"
       },
       "level_index": {
-        "rdf":"",
+        "rdf":"LevelIndex",
         "prefix":"trm"
       },
       "level_name": {
-        "rdf":"",
+        "rdf":"LevelName",
         "prefix":"trm"
       }
     },

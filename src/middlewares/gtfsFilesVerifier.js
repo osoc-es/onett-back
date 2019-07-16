@@ -1,10 +1,10 @@
 const fs  = require('fs');
-const YAML = require('yaml')
+const { execFile } = require('child_process');const YAML = require('yaml')
+const yarrrml = require('@rmlio/yarrrml-parser/lib/yarrrml2rml');
 const lineByLine = require('n-readlines');
 const gtfsFieldChecker = require('../../mapping/gtfsFieldChecker.json');
 const gtfsToRdf = require('../../mapping/gtfsToRdf.json');
-
-
+const y2r = new yarrrml();
 const requiredFiles = [];
 const optionalFiles = [];
 const dirFiles = [];
@@ -302,12 +302,16 @@ function mappingGenerator(jsonFile, outputFileName, path, extension, country, ci
 					}
 				});
 			let Yaml = YAML.stringify(jsonToYaml);
-			let sanitizedYaml ="";
+			let sanitizedYaml = "";
 			let result = {
 				"warning":"",
 				"yarrrml":"",
-				"error":""
+				"error":"",
+				"path":"",
+				"file":""
 			};
+			result.path = path;
+			result.file = outputFileName;
 			for (chr in Yaml){
 				if(Yaml[chr] != "\"" && Yaml[chr] != "\'")
 					sanitizedYaml +=   Yaml[chr];
@@ -321,13 +325,34 @@ function mappingGenerator(jsonFile, outputFileName, path, extension, country, ci
 					reject(result);
 				}
 			});
-			resolve(sanitizedYaml)
+			resolve(result);
 		});
 		});
 		return promise;
 	}catch(error){
 		console.log(error);
 	}
+}
+function yarrrmlToRml(data){
+	try{
+		let promise = new Promise(async (resolve, reject) => {
+			const child = execFile('./bashScripts/yarrrmlToRdf.sh', [data.path, data.file], (error, stdout, stderr) => {
+				if (error) {
+					console.log(error);
+				  reject(error);
+				}
+				console.log(stdout);
+				resolve(stdout);
+			  });
+			});
+		return promise;
+	}catch(error){
+		console.log("Catch: Falla yarrrmlToRdf")
+		console.log(error);
+		return error;
+
+	}
+
 }
 async function dynamicRdfMapGenerator(path, outputFileName, country, city, transport){
 	try{
@@ -349,6 +374,8 @@ async function dynamicRdfMapGenerator(path, outputFileName, country, city, trans
 		}).then((data) => {
 			console.log("Saves in " + outputFileName)
 			return  mappingGenerator(data, outputFileName, path, filesExtensions[0], country, city, transport);
+		}).then((data) => {
+			return yarrrmlToRml(data);
 		}).catch((error) => {
 			console.log("Fallo la promesa: " + error);
 			return error;

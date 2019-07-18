@@ -46,7 +46,11 @@ function dirFileCounter(path){
 			let files = fs.readdirSync(path);
 			if(files != null && files.length > 0){
 			files.forEach((file) =>{
-				let nameFile = file.split('.');
+				let lower = file.toLocaleLowerCase();
+				fs.rename(path+file, path+lower, function(err) {
+					if ( err ) console.log('ERROR: ' + err);
+				});
+				let nameFile = lower.split('.');
 				filesExtensions.push(nameFile[1]);
 				dirFiles.push(nameFile[0]);
 			});
@@ -131,6 +135,7 @@ function sanitizeVerifiedFiles(){
 
 	}
 }
+
 function fieldChecker(path, extension){
 	try{
 		let promise =  new Promise(async (resolve, reject) => {
@@ -200,7 +205,7 @@ function readFirstLine(path, filename, requiredFields, extension){
 			let line = liner.next();
 			let filledFields = [];		
 			fields = line.toString('ascii').replace("\r", "").replace("\n", "");
-			if(extension = "txt"){
+			if(extension == "txt"){
 				fields = fields.substring(3,fields.length) ;
 			}
 			fields = fields.split(',');
@@ -256,7 +261,7 @@ function mappingGenerator(jsonFile, outputFileName, path, extension, country, ci
 		//GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
 			await filenames.forEach(async (file) => {
 				jsonToYaml["mappings"][file] = {};
-				let source = `[${file}.${extension}~${extension}]`;
+				let source = `[/app/data/${file}.${extension}~${extension}]`;
 				let type = gtfsToRdf["data"][file]["type"];
 				let typePrefix = gtfsToRdf["data"][file]["typePrefix"];
 				let s  = `${subjectHead}${country}/${city}/${transport}/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})`;
@@ -336,7 +341,7 @@ function mappingGenerator(jsonFile, outputFileName, path, extension, country, ci
 function yarrrmlToRml(data){
 	try{
 		let promise = new Promise(async (resolve, reject) => {
-			let child = execFile('./bashScripts/yarrrmlToRdf.sh', [data.path, data.file], (error, stdout, stderr) => {
+			execFile('./bashScripts/yarrrmlToRdf.sh', [data.path, data.file], (error, stdout, stderr) => {
 				if (error) {
 					console.log(error);
 				  reject(error);
@@ -353,6 +358,26 @@ function yarrrmlToRml(data){
 
 	}
 
+}
+function mvFileToRdfizzer(path, data){
+	try{
+		let promise = new Promise(async (resolve, reject) => {
+			await finalFiles.forEach((file) => {
+				let actualPath = path + file + '.' + filesExtensions[0];
+				let newPath = `/home/w0xter/Desktop/Rdfizzer/TIB-RDFizer/data/${file}.${filesExtensions[0]}`
+				fs.copyFile(actualPath, newPath, function (err) {
+					if (err) {
+							reject(err);
+					}
+				});
+			});
+			resolve(data);
+
+		});
+		return promise;
+	}catch(error){
+
+	}
 }
 async function dynamicRdfMapGenerator(path, outputFileName, country, city, transport){
 	try{
@@ -374,6 +399,8 @@ async function dynamicRdfMapGenerator(path, outputFileName, country, city, trans
 		}).then((data) => {
 			console.log("Saves in " + outputFileName)
 			return  mappingGenerator(data, outputFileName, path, filesExtensions[0], country, city, transport);
+		}).then((data) => {
+			return mvFileToRdfizzer(path, data);
 		}).then((data) => {
 			return yarrrmlToRml(data);
 		}).catch((error) => {

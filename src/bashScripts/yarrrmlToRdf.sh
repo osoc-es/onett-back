@@ -1,6 +1,7 @@
 #!/bin/sh
 INPUT=$1$2.yaml
 OUTPUT=/home/w0xter/Desktop/Rdfizzer/TIB-RDFizer/mappings/mapping.rml.ttl
+sed -i '1s/^\xEF\xBB\xBF//' /home/w0xter/Desktop/Rdfizzer/TIB-RDFizer/data/*.csv
 yarrrml-parser -i $INPUT -o $OUTPUT
 while true; do
        if test -e $OUTPUT; then

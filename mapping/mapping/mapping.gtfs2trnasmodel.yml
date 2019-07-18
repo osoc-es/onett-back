@@ -305,6 +305,6 @@ mappings:
       - ['../gtfs/levels.csv~csv']
     s: https://w3id.org/transmodel/resource/levels/$(level_id)
     po:
-      -[a, trm:]
-      -[trm:LevelIndex, $(level_index)]  #ID referenced to stops.stops_id
-      -[trm:LevelName, $(level_name)]
+      - [a, trm:]
+      - [trm:LevelIndex, $(level_index)]  #ID referenced to stops.stops_id
+      - [trm:LevelName, $(level_name)]

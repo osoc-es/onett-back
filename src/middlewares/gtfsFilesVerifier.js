@@ -46,12 +46,12 @@ function dirFileCounter(path){
 			let files = fs.readdirSync(path);
 			if(files != null && files.length > 0){
 			files.forEach((file) =>{
-				let lower = file.toLocaleLowerCase();
+				let lower = file.toLocaleLowerCase().substring(0, file.length - 4) + '.csv';
 				fs.rename(path+file, path+lower, function(err) {
 					if ( err ) console.log('ERROR: ' + err);
 				});
 				let nameFile = lower.split('.');
-				filesExtensions.push(nameFile[1]);
+				filesExtensions.push('csv');
 				dirFiles.push(nameFile[0]);
 			});
 	
@@ -205,7 +205,8 @@ function readFirstLine(path, filename, requiredFields, extension){
 			let line = liner.next();
 			let filledFields = [];		
 			fields = line.toString('ascii').replace("\r", "").replace("\n", "");
-			if(extension == "txt"){
+			
+			if(fields.startsWith('o;?')){
 				fields = fields.substring(3,fields.length) ;
 			}
 			fields = fields.split(',');
@@ -261,7 +262,7 @@ function mappingGenerator(jsonFile, outputFileName, path, extension, country, ci
 		//GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
 			await filenames.forEach(async (file) => {
 				jsonToYaml["mappings"][file] = {};
-				let source = `[/app/data/${file}.${extension}~${extension}]`;
+				let source = `[/app/data/${file}.${extension}~csv]`;
 				let type = gtfsToRdf["data"][file]["type"];
 				let typePrefix = gtfsToRdf["data"][file]["typePrefix"];
 				let s  = `${subjectHead}${country}/${city}/${transport}/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})`;

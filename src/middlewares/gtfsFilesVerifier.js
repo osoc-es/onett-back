@@ -336,7 +336,7 @@ function mappingGenerator(jsonFile, outputFileName, path, extension, country, ci
 function yarrrmlToRml(data){
 	try{
 		let promise = new Promise(async (resolve, reject) => {
-			const child = execFile('./bashScripts/yarrrmlToRdf.sh', [data.path, data.file], (error, stdout, stderr) => {
+			let child = execFile('./bashScripts/yarrrmlToRdf.sh', [data.path, data.file], (error, stdout, stderr) => {
 				if (error) {
 					console.log(error);
 				  reject(error);

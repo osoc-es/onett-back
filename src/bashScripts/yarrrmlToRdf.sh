@@ -1,7 +1,7 @@
 #!/bin/sh
 INPUT=$1$2.yaml
 #OUTPUT is the path of the rdfizzer directroy.
-OUTPUT=/home/w0xter/Desktop/Rdfizzer/TIB-RDFizer
+OUTPUT=$3
 sed -i '1s/^\xEF\xBB\xBF//' $OUTPUT/data/*.csv
 wait 
 yarrrml-parser -i $INPUT -o $OUTPUT/mappings/mapping.rml.ttl
@@ -17,5 +17,9 @@ wait
 #	ls ~/Desktop/Rdfizzer/TIB-RDFizer/mappings/
 #fi
 docker exec rdfizer /app/run.sh /app/mappings/config.ini
-
-
+wait 
+rm $OUTPUT/data/*
+wait 
+rm $OUTPUT/mappings/mapping.rml.ttl
+wait
+echo Finished

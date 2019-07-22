@@ -506,7 +506,7 @@
     "typePrefix":"trm",
     "id":"shape_id",
     "fields":{
-      "shape_pl_lat":{
+      "shape_pt_lat":{
         "rdf":"lat",
         "prefix":"geo"
       },

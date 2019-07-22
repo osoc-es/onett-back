@@ -137,31 +137,38 @@ function sanitizeVerifiedFiles(){
 	}
 }
 
-function fieldChecker(path, extension){
+async function fieldChecker(path, extension){
 	try{
-		let promise =  new Promise(async (resolve, reject) => {
+		let promise =  await new Promise(async (resolve, reject) => {
+	try{
 		let finalJson = {};
-		let i = 0;
 		let error = false
-			while( i < finalFiles.length && !error){
+			for( i in finalFiles){
 				let file =  finalFiles[i];
 				getRequiredFields(finalFiles[i]).then((data) => {
 					return readFirstLine(path, file, data, extension);
-				}).then((data) => {
-					if(data.length > 0)
-						finalJson[file] = data;
+				}).then(async (data) => {
+					if(data.length > 0){
+						console.log(file + ":" + data.toString())
+						finalJson[file] = await data;
+					}else{
+						console.log("Algo salio mal con: " + file + " ha devuelto" + data.toString())
+						error = true;
+					}
+					/*
 					else if(optionalFiles.includes(file)  && data.length == 0){
 						finalFiles.splice(indexOf(file),1);
 						console.log("Borramos " + file);
 						warning += "El formato de " + file + " no era correcto por lo que se ha usado para generar el RDF.\n";
-					}
+					}*/
 				})
 				.catch((err) => {
 					console.log(err);
 					error = true;
 					return err;
 				});
-				await i++;
+				if(error)
+					break;
 			}
 		if(error){
 			console.log("Falla fieldChecker");
@@ -171,7 +178,10 @@ function fieldChecker(path, extension){
 			console.log(warning)
 			resolve (finalJson);
 		}
-		});
+	}catch(error){
+		reject(error);
+	}
+	});
 		return promise;
 	}catch(err){
 		console.log("Catch: Falla fieldChecker");
@@ -209,7 +219,7 @@ function readFirstLine(path, filename, requiredFields, extension){
 			fields = line.toString('ascii').replace("\r", "").replace("\n", "");
 			
 			if(fields.startsWith('o;?')){
-				fields = fields.substring(3,fields.length) ;
+				fields = fields.substring(3,fields.length);
 			}
 			fields = fields.split(',');
 			if(values = liner.next()){
@@ -251,9 +261,9 @@ function readFirstLine(path, filename, requiredFields, extension){
 		return error;
 	}
 }
-function mappingGenerator(jsonFile, outputFileName, path, extension, country, city, transport){
+async function mappingGenerator(jsonFile, outputFileName, path, extension, country, city, transport){
 	try{
-		let promise  = new Promise(async (resolve, reject) => {
+		let promise  = await new Promise(async (resolve, reject) => {
 			let filenames = Object.keys(jsonFile);
 			let jsonToYaml= {};
 			let subjectHead = gtfsToRdf["subjectHead"];
@@ -347,7 +357,7 @@ function mappingGenerator(jsonFile, outputFileName, path, extension, country, ci
 function yarrrmlToRml(data){
 	try{
 		let promise = new Promise(async (resolve, reject) => {
-			execFile('./bashScripts/yarrrmlToRdf.sh', [data.path, data.file], (error, stdout, stderr) => {
+			execFile('./bashScripts/yarrrmlToRdf.sh', [data.path, data.file, RdfizzerPath], (error, stdout, stderr) => {
 				if (error) {
 					console.log(error);
 				  reject(error);

@@ -26,6 +26,8 @@ function jsonFileCounter(){
 						optionalFiles.push(file);
 					}
 				}
+				console.log("required Files: " + requiredFiles.toString());
+				console.log("OptionalFiles " + optionalFiles.toString());
 				resolve ("GtfsFieldChecker loaded");
 			}else{
 				console.log("Falla jsonFileCounter");
@@ -55,7 +57,7 @@ function dirFileCounter(path){
 				filesExtensions.push('csv');
 				dirFiles.push(nameFile[0]);
 			});
-	
+				console.log("Dir files: " + dirFiles.toString());
 				resolve (filesExtensions[0]);
 			}else{
 				console.log("Falla dirFileCounter");
@@ -226,7 +228,7 @@ function readFirstLine(path, filename, requiredFields, extension){
 				values = values.toString('ascii').replace("\n", "").replace("\r", "").split(',');
 				//Borramos los campos vacios
 				for(i in fields){
-					if(values[i] != '' && values[i] != ' '){
+					if(values[i] != '' && values[i] != ' ' && Object.keys(gtfsFieldChecker[filename]["fields"]).includes(fields[i])){
 						filledFields.push(fields[i]);
 					}
 				}
@@ -265,6 +267,7 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 	try{
 		let promise  = await new Promise(async (resolve, reject) => {
 			let filenames = Object.keys(jsonFile);
+			console.log("Generating mapping with " + filenames);
 			let jsonToYaml= {};
 			let subjectHead = gtfsToRdf["subjectHead"];
 			let outputFile = outputFileName + '.yaml';
@@ -275,7 +278,8 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 			})
 			jsonToYaml["mappings"] = {}
 		//GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
-			await filenames.forEach(async (file) => {
+			await filenames.forEach(async (file) => {	
+				console.log("Generating: " + file)
 				jsonToYaml["mappings"][file] = {};
 				let source = `[/app/data/${file}.${extension}~csv]`;
 				let type = gtfsToRdf["data"][file]["type"];
@@ -322,6 +326,7 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 						jsonToYaml["mappings"][file]["po"].push(pObject);
 					}
 				});
+			});
 			let Yaml = YAML.stringify(jsonToYaml);
 			let sanitizedYaml = "";
 			let result = {
@@ -347,7 +352,6 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 				}
 			});
 			resolve(result);
-		});
 		});
 		return promise;
 	}catch(error){

@@ -12,7 +12,7 @@ const dirOptionalFiles = [];
 const filesExtensions = [];
 let finalFiles = [];
 let warning = "";
-const RdfizzerPath = "~/Desktop/Rdfizzer/TIB-RDFizer/";
+const RdfizzerPath = "/home/w0xter/Desktop/Rdfizzer/TIB-RDFizer";
 
 function jsonFileCounter(){
 	try{
@@ -152,6 +152,7 @@ function fieldChecker(path, extension){
 						finalJson[file] = data;
 					else if(optionalFiles.includes(file)  && data.length == 0){
 						finalFiles.splice(indexOf(file),1);
+						console.log("Borramos " + file);
 						warning += "El formato de " + file + " no era correcto por lo que se ha usado para generar el RDF.\n";
 					}
 				})
@@ -226,6 +227,7 @@ function readFirstLine(path, filename, requiredFields, extension){
 				}
 				if(j != requiredFields.length){
 					if(optionalFiles.includes(filename)){
+						console.log("Falta un campo obligatorio en " + filename + ": " +  requiredFields[j])
 						requiredFields = [];
 						resolve(requiredFields);
 					}else{
@@ -364,21 +366,28 @@ function yarrrmlToRml(data){
 function mvFileToRdfizzer(path, data){
 	try{
 		let promise = new Promise(async (resolve, reject) => {
-			await finalFiles.forEach((file) => {
-				let actualPath = path + file + '.' + filesExtensions[0];
-				let newPath = `${RdfizzerPath}data/${file}.${filesExtensions[0]}`
-				fs.copyFile(actualPath, newPath, function (err) {
-					if (err) {
-							reject(err);
-					}
-				});
+			console.log(finalFiles)
+			await finalFiles.forEach(async (file) => {
+				try{
+					let actualPath = path + file + '.' + filesExtensions[0];
+					let newPath = `${RdfizzerPath}/data/${file}.${filesExtensions[0]}`
+					await fs.copyFile(actualPath, newPath, function (err) {
+						if (err) {
+								reject(err);
+						}
+					});	
+					resolve(data);
+				}catch(error){
+					reject(error);
+				}
 			});
-			resolve(data);
 
 		});
 		return promise;
 	}catch(error){
-
+		console.log("Catch: falla mvFile");
+		console.log(error);
+		return error;
 	}
 }
 async function dynamicRdfMapGenerator(path, outputFileName, country, city, transport){

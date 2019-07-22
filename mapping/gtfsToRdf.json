@@ -507,12 +507,12 @@
     "id":"shape_id",
     "fields":{
       "shape_pl_lat":{
-        "geo":"lat",
-        "prefix":"trm"
+        "rdf":"lat",
+        "prefix":"geo"
       },
       "shape_pt_lon":{
-        "geo":"lon",
-        "prefix":"trm"
+        "rdf":"lon",
+        "prefix":"geo"
       },
       "shape_pt_sequence":{
         "rdf":"sequence",
@@ -781,6 +781,10 @@
       },
       "feed_start_date": {
         "rdf":"startDate",
+        "prefix":"schema"
+      },
+      "feed_end_date":{
+        "rdf":"endDate",
         "prefix":"schema"
       },
       "feed_version": {

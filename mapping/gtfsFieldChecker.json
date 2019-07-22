@@ -403,6 +403,9 @@
       "feed_start_date": {
         "type": "optional"
       },
+      "feed_end_date":{
+        "type":"optional"
+      },
       "feed_version": {
         "type": "optional"
       },

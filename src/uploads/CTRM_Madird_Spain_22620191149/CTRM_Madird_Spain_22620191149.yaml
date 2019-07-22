@@ -1,0 +1,163 @@
+prefixes:
+  trm: https://w3id.org/transmodel/terms#
+  geo: http://www.w3.org/2003/01/geo/wgs84_pos#
+  dct: http://purl.org/dc/terms/
+  foaf: http://xmlns.com/foaf/0.1/
+  schema: http://schema.org/
+mappings:
+  trips:
+    sources:
+      - [/app/data/trips.csv~csv]
+    s: https://w3id.org/transmodel/resource/Spain/Madird/Bus/trip$(trip_id)
+    po:
+      - [a, trm:ServiceJourney]
+      - [trm:lineRef, $(route_id)]
+      - [trm:DayTypeRef, $(service_id)]
+      - [trm:DestinationDisplayView, $(trip_headsign)]
+      - [trm:DirectionRef, $(direction_id)]
+      - [trm:LinkSequenceProjection, $(shape_id)]
+      - p: trm:route
+        o:
+          - mapping: routes
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(route_id)]
+                - [str2, $(route_id)]
+      - p: trm:service
+        o:
+          - mapping: calendar
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(service_id)]
+                - [str2, $(service_id)]
+          - mapping: calendar_dates
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(service_id)]
+                - [str2, $(service_id)]
+      - p: trm:shape
+        o:
+          - mapping: shapes
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(shape_id)]
+                - [str2, $(shape_id)]
+  agency:
+    sources:
+      - [/app/data/agency.csv~csv]
+    s: https://w3id.org/transmodel/resource/Spain/Madird/Bus/$(agency_id)
+    po:
+      - [a, trm:authority]
+      - [trm:authorityName, $(agency_name)]
+      - [trm:agencyUrl, $(agency_url)]
+      - [trm:authorityTimezone, $(agency_timezone)]
+      - [trm:authorityLang, $(agency_lang)]
+  stops:
+    sources:
+      - [/app/data/stops.csv~csv]
+    s: https://w3id.org/transmodel/resource/Spain/Madird/Bus/$(stop_id)
+    po:
+      - [a, trm:ScheduledStopPoint]
+      - [trm:PublicCode, $(stop_code)]
+      - [trm:Name, $(stop_name)]
+      - [trm:Latitude, $(stop_lat)]
+      - [trm:Longitud, $(stop_lon)]
+      - [trm:TariffZoneRef, $(zone_id)]
+      - [trm:Url, $(stop_url)]
+      - [trm:StopPlace, $(location_type)]
+  stop_times:
+    sources:
+      - [/app/data/stop_times.csv~csv]
+    s: https://w3id.org/transmodel/resource/Spain/Madird/Bus/$(trip_id)
+    po:
+      - [a, trm:ServiceJourney]
+      - [trm:arrivalTime, $(arrival_time)]
+      - [trm:Departure, $(departure_time)]
+      - [trm:ScheduledStopPointRef, $(stop_id)]
+      - [trm:stopSequence, $(stop_sequence)]
+      - p: trm:trip
+        o:
+          - mapping: trips
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(trip_id)]
+                - [str2, $(trip_id)]
+      - p: trm:stop
+        o:
+          - mapping: stops
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(stop_id)]
+                - [str2, $(stop_id)]
+  routes:
+    sources:
+      - [/app/data/routes.csv~csv]
+    s: https://w3id.org/transmodel/resource/Spain/Madird/Bus/routes$(route_id)
+    po:
+      - [a, trm:Line]
+      - [trm:shortName, $(route_short_name)]
+      - [trm:name, $(route_long_name)]
+      - [trm:Url, $(route_url)]
+      - [trm:Colour, $(route_color)]
+      - [trm:TextColour, $(route_text_color)]
+      - p: trm:agency
+        o:
+          - mapping: trips
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(agency_id)]
+                - [str2, $(agency_id)]
+  calendar:
+    sources:
+      - [/app/data/calendar.csv~csv]
+    s: https://w3id.org/transmodel/resource/Spain/Madird/Bus/$(service_id)
+    po:
+      - [a, trm:ServiceCalendarFrame]
+      - [trm:DaysOfWeek, $(monday)]
+      - [trm:DaysOfWeek, $(tuesday)]
+      - [trm:DaysOfWeek, $(wednesday)]
+      - [trm:DaysOfWeek, $(thursday)]
+      - [trm:DaysOfWeek, $(friday)]
+      - [trm:DaysOfWeek, $(saturday)]
+      - [trm:DaysOfWeek, $(sunday)]
+      - [trm:FromDate, $(start_date)]
+      - [trm:ToDate, $(end_date)]
+  calendar_dates:
+    sources:
+      - [/app/data/calendar_dates.csv~csv]
+    s: https://w3id.org/transmodel/resource/Spain/Madird/Bus/$(service_id)
+    po:
+      - [a, trm:ServiceCalendarFrame]
+      - [trm:ToDate, $(date)]
+      - [trm:IsAvailble, $(exception_type)]
+  shapes:
+    sources:
+      - [/app/data/shapes.csv~csv]
+    s: https://w3id.org/transmodel/resource/Spain/Madird/Bus/shapes$(shape_id)
+    po:
+      - [geo:lon, $(shape_pt_lon)]
+      - [trm:sequence, $(shape_pt_sequence)]
+  frequencies:
+    sources:
+      - [/app/data/frequencies.csv~csv]
+    s: https://w3id.org/transmodel/resource/Spain/Madird/Bus/frequency$(start_time)
+    po:
+      - [a, trm:Frequency]
+      - [trm:FirstDepartureTime, $(start_time)]
+      - [trm:LastDepartureTime, $(end_time)]
+      - [trm:ScheduledHeadwayInterval, $(headway_secs)]
+      - p: trm:trip
+        o:
+          - mapping: trips
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(trip_id)]
+                - [str2, $(trip_id)]

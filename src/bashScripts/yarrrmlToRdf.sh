@@ -1,8 +1,9 @@
 #!/bin/sh
 INPUT=$1$2.yaml
-OUTPUT=/home/w0xter/Desktop/Rdfizzer/TIB-RDFizer/mappings/mapping.rml.ttl
-sed -i '1s/^\xEF\xBB\xBF//' /home/w0xter/Desktop/Rdfizzer/TIB-RDFizer/data/*.csv
-yarrrml-parser -i $INPUT -o $OUTPUT
+#OUTPUT is the path of the rdfizzer directroy.
+OUTPUT=~/Desktop/Rdfizzer/TIB-RDFizer
+sed -i '1s/^\xEF\xBB\xBF//' /$OUTPUT/data/*.csv
+yarrrml-parser -i $INPUT -o $OUTPUT/mappings/mapping.rml.ttl
 while true; do
        if test -e $OUTPUT; then
 	       echo salgo!!

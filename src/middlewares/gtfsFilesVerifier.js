@@ -12,6 +12,7 @@ const dirOptionalFiles = [];
 const filesExtensions = [];
 let finalFiles = [];
 let warning = "";
+const RdfizzerPath = "~/Desktop/Rdfizzer/TIB-RDFizer/";
 
 function jsonFileCounter(){
 	try{
@@ -365,7 +366,7 @@ function mvFileToRdfizzer(path, data){
 		let promise = new Promise(async (resolve, reject) => {
 			await finalFiles.forEach((file) => {
 				let actualPath = path + file + '.' + filesExtensions[0];
-				let newPath = `/home/w0xter/Desktop/Rdfizzer/TIB-RDFizer/data/${file}.${filesExtensions[0]}`
+				let newPath = `${RdfizzerPath}data/${file}.${filesExtensions[0]}`
 				fs.copyFile(actualPath, newPath, function (err) {
 					if (err) {
 							reject(err);

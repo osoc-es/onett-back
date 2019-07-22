@@ -1,8 +1,8 @@
 #!/bin/sh
 INPUT=$1$2.yaml
 #OUTPUT is the path of the rdfizzer directroy.
-OUTPUT=~/Desktop/Rdfizzer/TIB-RDFizer
-sed -i '1s/^\xEF\xBB\xBF//' /$OUTPUT/data/*.csv
+OUTPUT=/home/w0xter/Desktop/Rdfizzer/TIB-RDFizer
+sed -i '1s/^\xEF\xBB\xBF//' $OUTPUT/data/*.csv
 wait 
 yarrrml-parser -i $INPUT -o $OUTPUT/mappings/mapping.rml.ttl
 wait

@@ -5,12 +5,12 @@ const lineByLine = require('n-readlines');
 const gtfsFieldChecker = require('../../mapping/gtfsFieldChecker.json');
 const gtfsToRdf = require('../../mapping/gtfsToRdf.json');
 const y2r = new yarrrml();
-const requiredFiles = [];
-const optionalFiles = [];
-const dirFiles = [];
-const dirOptionalFiles = [];
-const filesExtensions = [];
-let finalFiles = [];
+let requiredFiles = null;
+let optionalFiles = null;
+let dirFiles = null;
+let dirOptionalFiles = null;
+let filesExtensions = null;
+let finalFiles = null;
 let warning = "";
 const RdfizzerPath = "/home/w0xter/Desktop/Rdfizzer/TIB-RDFizer";
 
@@ -226,13 +226,15 @@ function readFirstLine(path, filename, requiredFields, extension){
 					j++;
 				}
 				if(j != requiredFields.length){
-					if(optionalFiles.includes(filename)){
+					/*if(optionalFiles.includes(filename)){
 						console.log("Falta un campo obligatorio en " + filename + ": " +  requiredFields[j])
 						requiredFields = [];
 						resolve(requiredFields);
 					}else{
 						reject("The required Fields of " + filename + " are not included")
-					}
+					} */
+					reject("The required Fields of " + filename + " are not included")
+
 				}else{
 					resolve(filledFields);
 				}
@@ -289,12 +291,12 @@ function mappingGenerator(jsonFile, outputFileName, path, extension, country, ci
 					}
 				});
 				await jsonFile[file].forEach(async (field) => {
-					if(joinsFields != undefined && joinsFields.includes(field)){
+					if(Object.keys(gtfsToRdf["data"][file]["joins"]).length > 0 && joinsFields.includes(field)){
 						let pObject =  {};
 						let pName =  Object.keys(gtfsToRdf["data"][file]["joins"]["p"])[joinsFields.indexOf(field)];
 						let pPrefix = gtfsToRdf["data"][file]["joins"]["p"][pName]["prefix"];
 						let mappings = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"];
-						pObject["p"] = pPrefix +":" +pName;
+						pObject["p"] = pPrefix + ":" + pName;
 						pObject["o"] =   [];
 						for (mapping in mappings){
 							let mapObject = {};
@@ -392,6 +394,12 @@ function mvFileToRdfizzer(path, data){
 }
 async function dynamicRdfMapGenerator(path, outputFileName, country, city, transport){
 	try{
+		requiredFiles = [];
+		optionalFiles = [];
+		dirFiles = [];
+		dirOptionalFiles = [];
+		filesExtensions = [];
+		finalFiles = [];
 		return jsonFileCounter().then((data) => {
 			console.log(data);
 			return dirFileCounter(path);
@@ -409,6 +417,7 @@ async function dynamicRdfMapGenerator(path, outputFileName, country, city, trans
 			return fieldChecker(path, filesExtensions[0]);
 		}).then((data) => {
 			console.log("Saves in " + outputFileName)
+			console.log(data)
 			return  mappingGenerator(data, outputFileName, path, filesExtensions[0], country, city, transport);
 		}).then((data) => {
 			return mvFileToRdfizzer(path, data);

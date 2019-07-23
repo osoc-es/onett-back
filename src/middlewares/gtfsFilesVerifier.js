@@ -150,6 +150,7 @@ async function fieldChecker(path, extension){
 				getRequiredFields(finalFiles[i]).then((data) => {
 					return readFirstLine(path, file, data, extension);
 				}).then(async (data) => {
+					try{
 					if(data.length > 0){
 						console.log(file + ":" + data.toString())
 						finalJson[file] = await data;
@@ -163,6 +164,10 @@ async function fieldChecker(path, extension){
 						console.log("Borramos " + file);
 						warning += "El formato de " + file + " no era correcto por lo que se ha usado para generar el RDF.\n";
 					}*/
+					}catch(error){
+						console.log("Falla fieldChecker 1");
+						return(error)
+					}
 				})
 				.catch((err) => {
 					console.log(err);
@@ -266,6 +271,7 @@ function readFirstLine(path, filename, requiredFields, extension){
 async function mappingGenerator(jsonFile, outputFileName, path, extension, country, city, transport){
 	try{
 		let promise  = await new Promise(async (resolve, reject) => {
+			try{
 			let filenames = Object.keys(jsonFile);
 			console.log("Generating mapping with " + filenames);
 			let jsonToYaml= {};
@@ -278,7 +284,8 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 			})
 			jsonToYaml["mappings"] = {}
 		//GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
-			await filenames.forEach(async (file) => {	
+			 for (i in filenames){	
+				let file = filenames[i];
 				console.log("Generating: " + file)
 				jsonToYaml["mappings"][file] = {};
 				let source = `[/app/data/${file}.${extension}~csv]`;
@@ -304,7 +311,8 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 							  jsonToYaml["mappings"][file]["po"].push(`[${prefix}:${rdfValue}, $(${field})]`);
 					}
 				});
-				await jsonFile[file].forEach(async (field) => {
+				 jsonFile[file].forEach(async (field) => {
+					try{
 					if(Object.keys(gtfsToRdf["data"][file]["joins"]).length > 0 && joinsFields.includes(field)){
 						let pObject =  {};
 						let pName =  Object.keys(gtfsToRdf["data"][file]["joins"]["p"])[joinsFields.indexOf(field)];
@@ -325,8 +333,12 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 						}
 						jsonToYaml["mappings"][file]["po"].push(pObject);
 					}
+				 }catch(error){
+					 console.log('Catch: Fallo en mapping generator 2 ' + file + ":" +  field );
+					reject(error)
+				 }
 				});
-			});
+			}
 			let Yaml = YAML.stringify(jsonToYaml);
 			let sanitizedYaml = "";
 			let result = {
@@ -352,6 +364,10 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 				}
 			});
 			resolve(result);
+		}catch(error){
+			console.log('Catch: Fallo en mapping generator 1');
+			reject(error);
+		}
 		});
 		return promise;
 	}catch(error){
@@ -361,6 +377,7 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 function yarrrmlToRml(data){
 	try{
 		let promise = new Promise(async (resolve, reject) => {
+			try{
 			execFile('./bashScripts/yarrrmlToRdf.sh', [data.path, data.file, RdfizzerPath], (error, stdout, stderr) => {
 				if (error) {
 					console.log(error);
@@ -369,6 +386,10 @@ function yarrrmlToRml(data){
 				console.log(stdout);
 				resolve(stdout);
 			  });
+			}catch(error){
+				console.log("Catch: Falla yarrrmlToRdf 1");
+				reject(error);
+			}
 			});
 		return promise;
 	}catch(error){
@@ -382,6 +403,7 @@ function yarrrmlToRml(data){
 function mvFileToRdfizzer(path, data){
 	try{
 		let promise = new Promise(async (resolve, reject) => {
+			try{
 			console.log(finalFiles)
 			await finalFiles.forEach(async (file) => {
 				try{
@@ -394,10 +416,14 @@ function mvFileToRdfizzer(path, data){
 					});	
 					resolve(data);
 				}catch(error){
+					console.log("Catch: falla mvFile 2");
 					reject(error);
 				}
 			});
-
+		}catch(error){
+			console.log("Catch: falla mvFile 1");
+			reject(error);
+		}
 		});
 		return promise;
 	}catch(error){

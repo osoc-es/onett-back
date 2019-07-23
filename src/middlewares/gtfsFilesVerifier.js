@@ -280,35 +280,35 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 			let outputFile = outputFileName + '.yaml';
 			let prefixArray = Object.keys(gtfsToRdf["prefixs"]);//PENSAR COMO HACER DISPLAY DE VARIOS PREFIJOS.
 			jsonToYaml["prefixes"] = {};
-			prefixArray.forEach(prefix => {
+			await prefixArray.forEach(prefix => {
 				jsonToYaml["prefixes"][prefix] = gtfsToRdf["prefixs"][prefix];
 			})
 			jsonToYaml["mappings"] = {}
 		//GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
 			 for ( let i = 0; i < filenames.length; i++){
-				let file = filenames[i];
+				let file = await filenames[i];
 				if(file != undefined && file != null){
 				console.log("Generating: " + file)
 				jsonToYaml["mappings"][file] = {};
-				let source = `[/app/data/${file}.${extension}~csv]`;
-				let type = gtfsToRdf["data"][file]["type"];
-				let typePrefix = gtfsToRdf["data"][file]["typePrefix"];
-				let s  = `${subjectHead}${country}/${city}/${transport}/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})`;
-				let fieldsElements = Object.keys(gtfsToRdf["data"][file]["fields"]);
-				let joinsFields = gtfsToRdf["data"][file]["joins"]["fields"];
-				let pType = `[a, ${typePrefix}:${type}]`; 
+				let source = await `[/app/data/${file}.${extension}~csv]`;
+				let type = await gtfsToRdf["data"][file]["type"];
+				let typePrefix = await gtfsToRdf["data"][file]["typePrefix"];
+				let s  = await `${subjectHead}${country}/${city}/${transport}/${gtfsToRdf["data"][file]["link"]}$(${gtfsToRdf["data"][file]["id"]})`;
+				let fieldsElements = await Object.keys(gtfsToRdf["data"][file]["fields"]);
+				let joinsFields = await gtfsToRdf["data"][file]["joins"]["fields"];
+				let pType = await `[a, ${typePrefix}:${type}]`; 
 	
-				jsonToYaml["mappings"][file]["sources"] = [source];
-				jsonToYaml["mappings"][file]["s"] = s;
-				jsonToYaml["mappings"][file]["po"] = [];
+				jsonToYaml["mappings"][file]["sources"] = await [source];
+				jsonToYaml["mappings"][file]["s"] = await s;
+				jsonToYaml["mappings"][file]["po"] = await [];
 				if(type != "")
 					jsonToYaml["mappings"][file]["po"].push(pType);
 				//USAMOS EL JSON gtfsToRdf PARA SELECCIONAR QUE REGLAS DEL MAPPING VA A USAR EL ENGINE DE YARML TO RDF
 				 await jsonFile[file].forEach((field) => {
 					if(fieldsElements.includes(field)){
 						//console.log("field: " + field);
-						let prefix =  gtfsToRdf["data"][file]["fields"][field]["prefix"];
-						let rdfValue =  `${gtfsToRdf["data"][file]["fields"][field]["rdf"]}`;
+						let prefix = gtfsToRdf["data"][file]["fields"][field]["prefix"];
+						let rdfValue = `${gtfsToRdf["data"][file]["fields"][field]["rdf"]}`;
 						if(rdfValue != "")
 							  jsonToYaml["mappings"][file]["po"].push(`[${prefix}:${rdfValue}, $(${field})]`);
 					}
@@ -317,23 +317,24 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 					try{
 					if(Object.keys(gtfsToRdf["data"][file]["joins"]).length > 0 && joinsFields.includes(field)){
 						let pObject =  {};
-						let pName =  Object.keys(gtfsToRdf["data"][file]["joins"]["p"])[joinsFields.indexOf(field)];
-						let pPrefix = gtfsToRdf["data"][file]["joins"]["p"][pName]["prefix"];
-						let mappings = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"];
-						pObject["p"] = pPrefix + ":" + pName;
-						pObject["o"] =   [];
-						for (mapping in mappings){
-							let mapObject = {};
-							mapObject["mapping"] = mapping;
-							mapObject["condition"] = {};
-							mapObject["condition"]["function"] = gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["function"];
-							mapObject["condition"]["parameters"] = [];
+						let pName = await  Object.keys(gtfsToRdf["data"][file]["joins"]["p"])[joinsFields.indexOf(field)];
+						let pPrefix = await gtfsToRdf["data"][file]["joins"]["p"][pName]["prefix"];
+						let mappings = await gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"];
+						pObject["p"] = await pPrefix + ":" + pName;
+						pObject["o"] = await   [];
+						for (let i = 0; i < Object.keys(mappings).length;i++){
+							let mapping = await Object.keys(mappings)[i];
+							let mapObject = await {};
+							mapObject["mapping"] = await mapping;
+							mapObject["condition"] = await {};
+							mapObject["condition"]["function"] = await gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["function"];
+							mapObject["condition"]["parameters"] = await [];
 							for (parameter in gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"]){
-								mapObject["condition"]["parameters"].push(`[${parameter}, $(${gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"][parameter]["value"]})]`);
+								await mapObject["condition"]["parameters"].push(`[${parameter}, $(${gtfsToRdf["data"][file]["joins"]["p"][pName]["o"]["mapping"][mapping]["parameters"][parameter]["value"]})]`);
 							}
-							pObject["o"].push(mapObject);
+							await pObject["o"].push(mapObject);
 						}
-						jsonToYaml["mappings"][file]["po"].push(pObject);
+						await jsonToYaml["mappings"][file]["po"].push(pObject);
 					}
 				 }catch(error){
 					 console.log('Catch: Fallo en mapping generator 2 ' + file + ":" +  field );

@@ -389,7 +389,8 @@ function yarrrmlToRml(data){
 				  reject(error);
 				}
 				console.log(stdout);
-				resolve(stdout);
+				data.rdfizzer = RdfizzerPath;
+				resolve(data);
 			  });
 			}catch(error){
 				console.log("Catch: Falla yarrrmlToRdf 1");

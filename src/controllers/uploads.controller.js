@@ -52,7 +52,7 @@
                 res.send("Ok");
                 console.log("Works!");
         }
-        exports.uploadFile = async function uploadFile(req, res){
+        exports.uploadFile = function uploadFile(req, res){
                 console.log(req.body);
                 let country  = req.body.country.toString();
 		let transport = req.body.transport.toString();	
@@ -60,8 +60,12 @@
                 let agency = req.body.agency.toString();
                 let date = Date.now();
                 let filename = req.body.filename.toString();
-                await gtfsVerifier(filename, country, transport, city, agency).then((data) =>{
-                        return res.status(200).send({"result":data});
+                gtfsVerifier(filename, country, transport, city, agency).then((data) =>{
+                        console.log('Data: ' + data)
+                        if(data.rdfizzer != null && data.rdfizzer != undefined){
+                                console.log('Descargamos')
+                                res.download(`${data.rdfizzer}/results/result-1.nt`, `${country}_${city}_${agency}_${transport}.nt`);
+                        }
                 }).catch((error) =>{
                         console.log(error);
                         return res.status(500).send({"result":error});

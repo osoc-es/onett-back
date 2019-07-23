@@ -9,7 +9,7 @@
   },
   "data":{
   "trips": {
-    "link":"trip",
+    "link":"trip/",
     "type":"ServiceJourney",
     "typePrefix":"trm",
     "id":"trip_id",
@@ -323,7 +323,7 @@
             }
           }
         },
-        "stop":{
+        "stops":{
           "prefix":"trm",
           "o":{
             "mapping":{
@@ -345,7 +345,7 @@
     }
   },
   "routes": {
-    "link":"routes",
+    "link":"routes/",
     "id":"route_id",
     "type":"Line",
     "typePrefix":"trm",
@@ -501,7 +501,7 @@
     }
   },
   "shapes":{
-    "link":"shapes",
+    "link":"shapes/",
     "type":"",
     "typePrefix":"trm",
     "id":"shape_id",
@@ -528,7 +528,7 @@
     }
   },
   "frequencies":{
-    "link":"frequency",
+    "link":"frequency/",
     "type":"Frequency",
     "typePrefix":"trm",
     "id":"start_time",
@@ -575,7 +575,7 @@
     }
   },
   "transfers":{
-    "link":"transfers",
+    "link":"transfers/",
     "type":"Connection",
     "typePrefix":"trm",
     "id":"from_stop_id",
@@ -641,7 +641,7 @@
 },
 
   "pathways": {
-    "link":"pathways",
+    "link":"pathways/",
     "type":"",
     "typePrefix":"trm",
     "id":"pathways_id",
@@ -738,7 +738,7 @@
 	}
     },
   "levels": {
-    "link":"levels",
+    "link":"levels/",
     "type":"",
     "typePrefix":"trm",
     "id":"level_id",
@@ -761,7 +761,7 @@
     }
   },
   "feed_info": {
-    "link":"feed",
+    "link":"feed/",
     "type":"",
     "typePrefix":"trm",
     "id":"feed_publisher_name",

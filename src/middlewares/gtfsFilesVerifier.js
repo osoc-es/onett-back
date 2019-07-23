@@ -145,7 +145,7 @@ async function fieldChecker(path, extension){
 	try{
 		let finalJson = {};
 		let error = false
-			for( i in finalFiles){
+			for( let i = 0; i < finalFiles.length; i++){
 				let file =  finalFiles[i];
 				getRequiredFields(finalFiles[i]).then((data) => {
 					return readFirstLine(path, file, data, extension);
@@ -272,8 +272,9 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 	try{
 		let promise  = await new Promise(async (resolve, reject) => {
 			try{
-			let filenames = Object.keys(jsonFile);
-			console.log("Generating mapping with " + filenames);
+			let filenames = Object.keys(jsonFile).toString();
+			filenames = filenames.replace(" ", "").split(",");
+			console.log("Generating mapping with " + filenames.toString() + ": " + filenames.length);
 			let jsonToYaml= {};
 			let subjectHead = gtfsToRdf["subjectHead"];
 			let outputFile = outputFileName + '.yaml';
@@ -284,8 +285,9 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 			})
 			jsonToYaml["mappings"] = {}
 		//GENERAMOS EL EQUIVALENTE EN YARML DE CADA UNO DE LOS ARCHIVOS VERIFICADOS QUE HEMOS DESCOMPRIMIDO.
-			 for (i in filenames){	
+			 for ( let i = 0; i < filenames.length; i++){
 				let file = filenames[i];
+				if(file != undefined && file != null){
 				console.log("Generating: " + file)
 				jsonToYaml["mappings"][file] = {};
 				let source = `[/app/data/${file}.${extension}~csv]`;
@@ -339,6 +341,7 @@ async function mappingGenerator(jsonFile, outputFileName, path, extension, count
 				 }
 				});
 			}
+			}
 			let Yaml = YAML.stringify(jsonToYaml);
 			let sanitizedYaml = "";
 			let result = {
@@ -378,6 +381,7 @@ function yarrrmlToRml(data){
 	try{
 		let promise = new Promise(async (resolve, reject) => {
 			try{
+			if(data.path != undefined && data.path != null && data.file != undefined && data.file != null)
 			execFile('./bashScripts/yarrrmlToRdf.sh', [data.path, data.file, RdfizzerPath], (error, stdout, stderr) => {
 				if (error) {
 					console.log(error);

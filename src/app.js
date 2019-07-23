@@ -24,7 +24,7 @@ const PORT = 3333;
 
 app = express();
 app.use(cors());
-app.use("/upload", upload);
+app.use("/", upload);
 app.listen(PORT, function(){
 console.log("App listening in port " + PORT);
 });

@@ -10,7 +10,8 @@ mappings:
   agency:
     sources:
       - ['../gtfs/agency.csv~csv']
-    s: https://w3id.org/transmodel/resource/pais/ciudad/tipo_trasporte/authority/$(agency_id)
+      #URI example template
+    s: https://w3id.org/transmodel/resource/[country]/[city]/[transport]/authority/$(agency_id)
     po:
       - [a, trm:authority]
       - [trm:uthorityName, $(agency_name)]
